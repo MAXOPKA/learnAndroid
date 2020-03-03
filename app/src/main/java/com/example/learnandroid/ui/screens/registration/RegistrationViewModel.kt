@@ -6,59 +6,71 @@ import com.example.learnandroid.models.RegistrationModel
 import com.example.learnandroid.services.API
 import com.example.learnandroid.services.Database
 import com.example.learnandroid.services.api.requests.RegistrationRequest
-import com.example.learnandroid.services.api.responses.RegistrationResponse
+import com.example.learnandroid.ui.screens.login.LoginDirections
+import com.example.learnandroid.ui.utils.MessageTypes
+import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import com.example.learnandroid.utils.DaggerAppComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
-class RegistrationViewModel() : ViewModel() {
-    // TODO: Implement the ViewModel
+class RegistrationViewModel() : BaseViewModel() {
 
     @Inject lateinit var apiService: API
     @Inject lateinit var databaseService: Database
 
-    var textError = MutableLiveData<String?>()
-    var textSuccess = MutableLiveData<String?>()
-    var isLoading = MutableLiveData<Boolean>(false)
+    var liveDataModel = MutableLiveData<RegistrationLiveDataModel>(RegistrationLiveDataModel(
+        null,
+        MessageTypes.ERROR,
+        false
+    ))
 
     init {
         DaggerAppComponent.create().injectRegistrationViewModel(this)
     }
 
+    /* Navigation */
+
+    fun navigateToTransactions() {
+        navigate(RegistrationDirections.actionRegistrationToTransactionsList())
+    }
+
     /* Actions */
     fun registration(name: String, email: String, password: String, passwordConfirmation: String) {
-        textError.value = null
+        liveDataModel.value?.messageText = null
 
         if (!validateRegistration(name, email, password, passwordConfirmation)) {
-            textError.value = "Error field values!"
+            liveDataModel.value?.messageText = "Error field values!"
+            liveDataModel.value?.messageType = MessageTypes.ERROR
 
             return
         }
 
-        isLoading.value = true
+        liveDataModel.value?.isLoading = true
         val registrationData = RegistrationRequest(name, email, password)
 
         apiService.registration(registrationData)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({ result ->
-                isLoading.value = false
                 registrationHandler(result)
             }, { error ->
-                isLoading.value = false
-                textError.value = "Error"
+                liveDataModel.value?.isLoading = false
+                liveDataModel.value?.messageText = "Error"
+                liveDataModel.value?.messageType = MessageTypes.ERROR
             })
     }
 
     /* Handlers */
     private fun registrationHandler(result: RegistrationModel) {
+        liveDataModel.value?.isLoading = false
         if (result.error) {
-            textError.value = "Error"
+            liveDataModel.value?.messageText = "Error"
+            liveDataModel.value?.messageType = MessageTypes.ERROR
         } else {
-            textError.value = null
-            textSuccess.value = "Success! Token ${result.idToken}"
+            liveDataModel.value?.messageText = "Success!"
+            liveDataModel.value?.messageType = MessageTypes.SUCCESS
         }
     }
 

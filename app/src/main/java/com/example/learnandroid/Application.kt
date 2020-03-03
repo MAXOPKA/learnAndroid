@@ -1,11 +1,18 @@
 package com.example.learnandroid
 
 import android.app.Application
-import com.example.learnandroid.utils.AppComponent
-import com.example.learnandroid.utils.DaggerAppComponent
+import android.content.Context
 
-class App : Application() {
+
+class App: Application() {
     override fun onCreate() {
         super.onCreate()
+
+        instance = this
+    }
+
+    companion object {
+        lateinit var instance: App
+            private set
     }
 }

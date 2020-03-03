@@ -10,15 +10,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.learnandroid.R
-import kotlinx.android.synthetic.main.registration_fragment.*
+import com.example.learnandroid.ui.screens.login.LoginViewModel
+import com.example.learnandroid.ui.utils.MessageTypes
+import com.example.learnandroid.ui.utils.baseui.BaseFragment
+import kotlinx.android.synthetic.main.registration_fragment.messageText
+import kotlinx.android.synthetic.main.registration_fragment.progressOverlay
 
-class Registration : Fragment() {
+class Registration : BaseFragment() {
 
     companion object {
         fun newInstance() = Registration()
     }
 
-    private lateinit var viewModel: RegistrationViewModel
+    private val registrationViewModel: RegistrationViewModel
+        get() { return viewModel as RegistrationViewModel }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,9 +33,10 @@ class Registration : Fragment() {
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RegistrationViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        super.onActivityCreated(savedInstanceState)
+
         setRegistrationButtonAction()
         initLiveData()
     }
@@ -44,7 +50,7 @@ class Registration : Fragment() {
             val passwordField = view?.findViewById(R.id.passwordField) as EditText
             val passwordRetryField = view?.findViewById(R.id.passwordRetryField) as EditText
 
-            viewModel.registration(
+            registrationViewModel.registration(
                 nameField.text.toString(),
                 emailField.text.toString(),
                 passwordField.text.toString(),
@@ -53,46 +59,38 @@ class Registration : Fragment() {
     }
 
     private fun initLiveData() {
-        initErrorTextLiveData()
-        initSuccessTextLiveData()
-        initOverlayLiveData()
-    }
-
-    private fun initErrorTextLiveData() {
-        val textObserver = Observer<String?> { text ->
-            errorText.text = text
-            if (text.isNullOrEmpty()) {
-                errorText.visibility = View.GONE
-            } else {
-                errorText.visibility = View.VISIBLE
-            }
+        val dataObserver = Observer<RegistrationLiveDataModel?> { dataModel ->
+            setData(dataModel!!)
         }
 
-        viewModel.textError.observe(this, textObserver)
+        registrationViewModel.liveDataModel.observe(viewLifecycleOwner, dataObserver)
     }
 
-    private fun initSuccessTextLiveData() {
-        val textObserver = Observer<String?> { text ->
-            successText.text = text
-            if (text.isNullOrEmpty()) {
-                successText.visibility = View.GONE
-            } else {
-                successText.visibility = View.VISIBLE
-            }
-        }
-
-        viewModel.textSuccess.observe(this, textObserver)
+    fun setData(dataModel: RegistrationLiveDataModel) {
+        setMessageText(dataModel.messageText)
+        setMessageColor(dataModel.messageType)
+        setOverlayVisiblity(dataModel.isLoading)
     }
 
-    private fun initOverlayLiveData() {
-        val overlayObserver = Observer<Boolean> { isLoading ->
-            if (isLoading) {
-                progressOverlay.visibility = View.VISIBLE
-            } else {
-                progressOverlay.visibility = View.GONE
-            }
-        }
+    private fun setMessageText(text: String?) {
+        messageText.text = text
 
-        viewModel.isLoading.observe(this, overlayObserver)
+        if (text.isNullOrEmpty()) {
+            messageText.visibility = View.GONE
+        } else {
+            messageText.visibility = View.VISIBLE
+        }
+    }
+
+    private fun setMessageColor(messageType: MessageTypes) {
+        messageText.setTextColor(messageType.rgb)
+    }
+
+    private fun setOverlayVisiblity(isLoading: Boolean) {
+        if (isLoading) {
+            progressOverlay.visibility = View.VISIBLE
+        } else {
+            progressOverlay.visibility = View.GONE
+        }
     }
 }

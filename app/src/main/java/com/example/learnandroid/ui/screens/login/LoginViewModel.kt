@@ -1,62 +1,90 @@
 package com.example.learnandroid.ui.screens.login
 
+import android.R.attr.data
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.learnandroid.models.LoginModel
 import com.example.learnandroid.services.API
 import com.example.learnandroid.services.Database
-import com.example.learnandroid.utils.DaggerAppComponent
-import javax.inject.Inject
 import com.example.learnandroid.services.api.requests.LoginRequest
+import com.example.learnandroid.ui.utils.MessageTypes
+import com.example.learnandroid.ui.utils.baseui.BaseViewModel
+import com.example.learnandroid.utils.DaggerAppComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+
+class LoginViewModel : BaseViewModel() {
 
     @Inject lateinit var apiService: API
     @Inject lateinit var databaseService: Database
 
-    var textError = MutableLiveData<String?>()
-    var textSuccess = MutableLiveData<String?>()
-    var isLoading = MutableLiveData<Boolean>(false)
+    private var liveDataModel = MutableLiveData<LoginDataModel>(LoginDataModel(
+        null,
+        MessageTypes.ERROR,
+        false
+    ))
 
     init {
         DaggerAppComponent.create().injectLoginViewModel(this)
     }
 
+    /* Navigation */
+    fun navigateToRegistration() {
+        navigate(LoginDirections.actionLoginToRegistration())
+    }
+
+    fun navigateToTransactions() {
+        navigate(LoginDirections.actionLoginToTransactionsList())
+    }
+
     /* Actions */
     fun login(email: String, password: String) {
-        textError.value = null
-
         if (!validateLogin(email, password)) {
-            textError.value = "Error field values!"
+            liveDataModel.value = liveDataModel.value?.apply { messageText = "Error field values!" }
 
             return
         }
 
-        isLoading.value = true
+        liveDataModel.value = liveDataModel.value?.apply { isLoading = true }
         val loginData = LoginRequest(email, password)
 
         apiService.login(loginData)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({ result ->
-                isLoading.value = false
                 loginHandler(result)
             }, { error ->
-                isLoading.value = false
-                textError.value = "Error"
+                loginErrorHandler(error)
             })
+    }
+
+    fun getLoginData(): MutableLiveData<LoginDataModel>? {
+        return liveDataModel
     }
 
     /* Handlers */
     fun loginHandler(result: LoginModel) {
+        liveDataModel.value?.isLoading = false
+
         if (result.error) {
-            textError.value = "Error"
+            liveDataModel.value?.messageText = "Error"
+            liveDataModel.value?.messageType = MessageTypes.ERROR
         } else {
-            textError.value = null
-            textSuccess.value = "Success! Token ${result.idToken}"
+            liveDataModel.value?.messageType = MessageTypes.SUCCESS
+            liveDataModel.value?.messageText = "Success!"
         }
+
+        liveDataModel.postValue(liveDataModel.value)
+        navigateToTransactions()
+    }
+
+    fun loginErrorHandler(error: Throwable) {
+        liveDataModel.value?.isLoading = false
+        liveDataModel.value?.messageText = "Error"
+        liveDataModel.value?.messageType = MessageTypes.ERROR
+
+        liveDataModel.postValue(liveDataModel.value)
     }
 
     /* Validators */

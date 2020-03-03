@@ -6,8 +6,14 @@
     <fragment android:id="@+id/login" android:name="com.example.learnandroid.ui.screens.login.Login"
               android:label="Login">
         <action android:id="@+id/action_login_to_registration" app:destination="@id/registration"/>
+        <action android:id="@+id/action_login_to_transactionsList" app:destination="@id/transactionsList"/>
     </fragment>
     <fragment android:id="@+id/registration"
               android:name="com.example.learnandroid.ui.screens.registration.Registration"
-              android:label="Registration"/>
+              android:label="Registration">
+        <action android:id="@+id/action_registration_to_transactionsList" app:destination="@id/transactionsList"/>
+    </fragment>
+    <fragment android:id="@+id/transactionsList"
+              android:name="com.example.learnandroid.ui.screens.transactionsList.TransactionsList"
+              android:label="TransactionsList"/>
 </navigation>

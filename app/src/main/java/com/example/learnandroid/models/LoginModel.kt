@@ -1,4 +1,4 @@
 package com.example.learnandroid.models
 
-data class LoginModel(val error: Boolean, val idToken: String?) {
+data class LoginModel (val error: Boolean = false, val errorMessage: String?) {
 }
