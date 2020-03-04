@@ -3,15 +3,13 @@ package com.example.learnandroid.services
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.example.learnandroid.App
-import com.example.learnandroid.models.LoginModel
-import com.example.learnandroid.models.RegistrationModel
-import com.example.learnandroid.models.TransactionModel
-import com.example.learnandroid.models.TransactionsModel
+import com.example.learnandroid.models.*
 import com.example.learnandroid.services.api.requests.LoginRequest
 import com.example.learnandroid.services.api.requests.RegistrationRequest
 import com.example.learnandroid.services.api.responses.LoginResponse
 import com.example.learnandroid.services.api.responses.RegistrationResponse
 import com.example.learnandroid.services.api.responses.TransactionsResponse
+import com.example.learnandroid.services.api.responses.UserInfoResponse
 import com.example.learnandroid.services.api.utils.Endpoints
 import com.example.learnandroid.services.api.utils.interceptors.AuthTokenInterceptor
 import com.example.learnandroid.services.api.utils.interceptors.HttpCodeInterceptor
@@ -63,6 +61,14 @@ object API {
         }
     }
 
+    fun userInfo(): Observable<UserInfoModel> {
+        val api: Endpoints = retrofit.create(Endpoints::class.java)
+
+        return api.userInfo().map { result ->
+            return@map userInfoHandler(result)
+        }
+    }
+
     /* Handlers */
 
     private fun registrationHandler(response: Response<RegistrationResponse>?): RegistrationModel {
@@ -96,12 +102,17 @@ object API {
         return TransactionsModel(true, null, null)
     }
 
-    /* Token action */
+    private fun userInfoHandler(response: Response<UserInfoResponse>?): UserInfoModel {
+        response?.let { it ->
+            return UserInfoModel(
+                !it.isSuccessful,
+                null,
+                it.body()?.id,
+                it.body()?.name,
+                it.body()?.email,
+                it.body()?.balance)
+        }
 
-    private fun setAuthToken(authToken: String?) {
-        val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.instance);
-        val editor = preferences.edit()
-        editor.putString("authToken", authToken)
-        editor.commit()
+        return UserInfoModel(true, null)
     }
 }

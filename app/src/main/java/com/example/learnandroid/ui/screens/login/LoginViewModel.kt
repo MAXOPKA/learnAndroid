@@ -1,33 +1,20 @@
 package com.example.learnandroid.ui.screens.login
 
-import android.R.attr.data
 import androidx.lifecycle.MutableLiveData
 import com.example.learnandroid.models.LoginModel
-import com.example.learnandroid.services.API
-import com.example.learnandroid.services.Database
 import com.example.learnandroid.services.api.requests.LoginRequest
 import com.example.learnandroid.ui.utils.MessageTypes
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
-import com.example.learnandroid.utils.DaggerAppComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
 
 class LoginViewModel : BaseViewModel() {
-
-    @Inject lateinit var apiService: API
-    @Inject lateinit var databaseService: Database
-
-    private var liveDataModel = MutableLiveData<LoginDataModel>(LoginDataModel(
+    private var liveDataModel = MutableLiveData<LoginLiveDataModel>(LoginLiveDataModel(
         null,
         MessageTypes.ERROR,
         false
     ))
-
-    init {
-        DaggerAppComponent.create().injectLoginViewModel(this)
-    }
 
     /* Navigation */
     fun navigateToRegistration() {
@@ -59,12 +46,12 @@ class LoginViewModel : BaseViewModel() {
             })
     }
 
-    fun getLoginData(): MutableLiveData<LoginDataModel>? {
+    fun getLoginData(): MutableLiveData<LoginLiveDataModel>? {
         return liveDataModel
     }
 
     /* Handlers */
-    fun loginHandler(result: LoginModel) {
+    private fun loginHandler(result: LoginModel) {
         liveDataModel.value?.isLoading = false
 
         if (result.error) {
@@ -79,7 +66,7 @@ class LoginViewModel : BaseViewModel() {
         navigateToTransactions()
     }
 
-    fun loginErrorHandler(error: Throwable) {
+    private fun loginErrorHandler(error: Throwable) {
         liveDataModel.value?.isLoading = false
         liveDataModel.value?.messageText = "Error"
         liveDataModel.value?.messageType = MessageTypes.ERROR

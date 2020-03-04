@@ -5,6 +5,7 @@
 
     <fragment android:id="@+id/login" android:name="com.example.learnandroid.ui.screens.login.Login"
               android:label="Login">
+        <action android:id="@+id/action_login_to_login" app:destination="@id/login"/>
         <action android:id="@+id/action_login_to_registration" app:destination="@id/registration"/>
         <action android:id="@+id/action_login_to_transactionsList" app:destination="@id/transactionsList"/>
     </fragment>

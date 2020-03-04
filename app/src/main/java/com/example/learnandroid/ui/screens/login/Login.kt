@@ -2,22 +2,17 @@ package com.example.learnandroid.ui.screens.login
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment.findNavController
-import androidx.navigation.fragment.findNavController
 
 import com.example.learnandroid.R
 import com.example.learnandroid.ui.utils.MessageTypes
 import com.example.learnandroid.ui.utils.baseui.BaseFragment
-import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import kotlinx.android.synthetic.main.login_fragment.*
 
 class Login : BaseFragment() {
@@ -37,6 +32,8 @@ class Login : BaseFragment() {
         setLoginButtonAction()
         setRegistrationButtonAction()
         initLiveData()
+
+        super.checkAuthorization()
     }
 
     override fun onCreateView(
@@ -47,7 +44,6 @@ class Login : BaseFragment() {
     }
 
     private fun setRegistrationButtonAction() {
-        val navController = findNavController(this)
         val button = view?.findViewById<Button>(R.id.registrationButton)
 
         button?.setOnClickListener {
@@ -67,17 +63,17 @@ class Login : BaseFragment() {
     }
 
     private fun initLiveData() {
-        val dataObserver = Observer<LoginDataModel?> { dataModel ->
+        val dataObserver = Observer<LoginLiveDataModel?> { dataModel ->
             setData(dataModel!!)
         }
 
         loginViewModel.getLoginData()?.observe(viewLifecycleOwner, dataObserver)
     }
 
-    fun setData(dataModel: LoginDataModel) {
-        setMessageText(dataModel.messageText)
-        setMessageColor(dataModel.messageType)
-        setOverlayVisiblity(dataModel.isLoading)
+    fun setData(liveDataModel: LoginLiveDataModel) {
+        setMessageText(liveDataModel.messageText)
+        setMessageColor(liveDataModel.messageType)
+        setOverlayVisiblity(liveDataModel.isLoading)
     }
 
     private fun setMessageText(text: String?) {
@@ -91,7 +87,7 @@ class Login : BaseFragment() {
     }
 
     private fun setMessageColor(messageType: MessageTypes) {
-        messageText.setTextColor(messageType.rgb)
+        // messageText.setTextColor(messageType.rgb)
     }
 
     private fun setOverlayVisiblity(isLoading: Boolean) {

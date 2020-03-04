@@ -16,16 +16,9 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class TransactionsListViewModel : BaseViewModel() {
-    @Inject lateinit var apiService: API
-    @Inject lateinit var databaseService: Database
-
     var liveDataModel = MutableLiveData<TransactionsListLiveDataModel>(
         TransactionsListLiveDataModel(emptyList())
     )
-
-    init {
-        DaggerAppComponent.create().injectTransactionsListViewModel(this)
-    }
 
     /* Actions */
     fun getTransactions() {
@@ -35,6 +28,7 @@ class TransactionsListViewModel : BaseViewModel() {
             .subscribe ({ result ->
                 getTransactionsHandler(result)
             }, { error ->
+                super.errorHandler(error)
                 getTransactionsErrorHandler()
             })
     }

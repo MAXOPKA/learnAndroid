@@ -28,4 +28,8 @@ open class BaseFragment : Fragment() {
 
         viewModel?.getNavigationCommands()?.observe(viewLifecycleOwner, navigationObserver)
     }
+
+    fun checkAuthorization() {
+
+    }
 }

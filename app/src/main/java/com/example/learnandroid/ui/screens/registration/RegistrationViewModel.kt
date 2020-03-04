@@ -16,19 +16,11 @@ import javax.inject.Inject
 
 
 class RegistrationViewModel() : BaseViewModel() {
-
-    @Inject lateinit var apiService: API
-    @Inject lateinit var databaseService: Database
-
     var liveDataModel = MutableLiveData<RegistrationLiveDataModel>(RegistrationLiveDataModel(
         null,
         MessageTypes.ERROR,
         false
     ))
-
-    init {
-        DaggerAppComponent.create().injectRegistrationViewModel(this)
-    }
 
     /* Navigation */
 
@@ -56,9 +48,7 @@ class RegistrationViewModel() : BaseViewModel() {
             .subscribe ({ result ->
                 registrationHandler(result)
             }, { error ->
-                liveDataModel.value?.isLoading = false
-                liveDataModel.value?.messageText = "Error"
-                liveDataModel.value?.messageType = MessageTypes.ERROR
+                registrationErrorHandler(error)
             })
     }
 
@@ -72,6 +62,12 @@ class RegistrationViewModel() : BaseViewModel() {
             liveDataModel.value?.messageText = "Success!"
             liveDataModel.value?.messageType = MessageTypes.SUCCESS
         }
+    }
+
+    fun registrationErrorHandler(error: Throwable) {
+        liveDataModel.value?.isLoading = false
+        liveDataModel.value?.messageText = "Error"
+        liveDataModel.value?.messageType = MessageTypes.ERROR
     }
 
     /* Validators */
