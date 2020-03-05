@@ -16,5 +16,9 @@
     </fragment>
     <fragment android:id="@+id/transactionsList"
               android:name="com.example.learnandroid.ui.screens.transactionsList.TransactionsList"
-              android:label="TransactionsList"/>
+              android:label="TransactionsList">
+        <action android:id="@+id/action_transactionsList_to_selectUser" app:destination="@id/selectUser"/>
+    </fragment>
+    <fragment android:id="@+id/selectUser" android:name="com.example.learnandroid.ui.screens.selectUser.SelectUser"
+              android:label="SelectUser"/>
 </navigation>

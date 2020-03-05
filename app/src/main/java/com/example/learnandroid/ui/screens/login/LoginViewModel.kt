@@ -16,12 +16,18 @@ class LoginViewModel : BaseViewModel() {
         false
     ))
 
+    init {
+        if (preferencesService.getAuthToken() != null) {
+            navigateToTransactions()
+        }
+    }
+
     /* Navigation */
     fun navigateToRegistration() {
         navigate(LoginDirections.actionLoginToRegistration())
     }
 
-    fun navigateToTransactions() {
+    private fun navigateToTransactions() {
         navigate(LoginDirections.actionLoginToTransactionsList())
     }
 

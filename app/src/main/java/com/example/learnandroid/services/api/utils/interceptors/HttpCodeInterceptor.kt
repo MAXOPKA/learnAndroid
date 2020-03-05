@@ -1,24 +1,27 @@
 package com.example.learnandroid.services.api.utils.interceptors
 
-import android.content.SharedPreferences
-import androidx.preference.PreferenceManager
-import com.example.learnandroid.App
+import com.example.learnandroid.services.Preferences
 import com.example.learnandroid.services.api.utils.exceptions.BadRequestException
 import com.example.learnandroid.services.api.utils.exceptions.InternalServerErrorException
 import com.example.learnandroid.services.api.utils.exceptions.UnauthorizedException
+import com.example.learnandroid.utils.DaggerAppComponent
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
-object HttpCodeInterceptor: Interceptor {
+class HttpCodeInterceptor: Interceptor {
+    @Inject lateinit var preferences: Preferences
+
+    init {
+        DaggerAppComponent.create().injectHttpCodeInterceptor(this)
+    }
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val response: Response = chain.proceed(chain.request());
 
         when(response.code()) {
             401 -> {
-                val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(App.instance);
-                val editor = preferences.edit()
-                editor.putString("authToken", null)
-                editor.commit()
+                preferences.setAuthToken(null)
 
                 throw UnauthorizedException("User is not authorized");
             }

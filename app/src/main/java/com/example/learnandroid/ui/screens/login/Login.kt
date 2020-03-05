@@ -44,17 +44,13 @@ class Login : BaseFragment() {
     }
 
     private fun setRegistrationButtonAction() {
-        val button = view?.findViewById<Button>(R.id.registrationButton)
-
-        button?.setOnClickListener {
+        registrationButton?.setOnClickListener {
             loginViewModel.navigateToRegistration()
         }
     }
 
     private fun setLoginButtonAction() {
-        val button = view?.findViewById<Button>(R.id.loginButton)
-
-        button?.setOnClickListener {
+        loginButton?.setOnClickListener {
             val emailField = view?.findViewById(R.id.emailField) as EditText
             val passwordField = view?.findViewById(R.id.passwordField) as EditText
 

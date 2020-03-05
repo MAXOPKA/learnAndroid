@@ -10,5 +10,4 @@ import android.view.ViewGroup
 import com.example.learnandroid.R
 
 class TransactionsListItem : Fragment() {
-
 }

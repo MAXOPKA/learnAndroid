@@ -1,4 +1,4 @@
-package com.example.learnandroid.ui.components.searchbar
+package com.example.learnandroid.ui.components.usersList
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -8,27 +8,28 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.example.learnandroid.R
-import com.example.learnandroid.ui.components.usersList.UsersListViewModel
+import com.example.learnandroid.ui.screens.selectUser.SelectUserViewModel
 import com.example.learnandroid.ui.utils.baseui.BaseFragment
 
-class SearchBar : BaseFragment() {
+class UsersList : BaseFragment() {
 
     companion object {
-        fun newInstance() = SearchBar()
+        fun newInstance() = UsersList()
     }
 
-    val searchBarViewModel: SearchBarViewModel
-        get() { return viewModel as SearchBarViewModel }
+    val usersListViewModel: UsersListViewModel
+        get() { return viewModel as UsersListViewModel }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.search_bar_fragment, container, false)
+        return inflater.inflate(R.layout.users_list_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-        viewModel = ViewModelProviders.of(this).get(SearchBarViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(UsersListViewModel::class.java)
         super.onActivityCreated(savedInstanceState)
     }
+
 }

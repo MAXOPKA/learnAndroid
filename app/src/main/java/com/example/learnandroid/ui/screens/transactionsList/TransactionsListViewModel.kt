@@ -7,6 +7,7 @@ import com.example.learnandroid.models.TransactionsModel
 import com.example.learnandroid.services.API
 import com.example.learnandroid.services.Database
 import com.example.learnandroid.services.api.responses.Transaction
+import com.example.learnandroid.ui.screens.login.LoginDirections
 import com.example.learnandroid.ui.screens.registration.RegistrationLiveDataModel
 import com.example.learnandroid.ui.utils.MessageTypes
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
@@ -19,6 +20,11 @@ class TransactionsListViewModel : BaseViewModel() {
     var liveDataModel = MutableLiveData<TransactionsListLiveDataModel>(
         TransactionsListLiveDataModel(emptyList())
     )
+
+    /* Navigation */
+    fun navigateToSelectUser() {
+        navigate(TransactionsListDirections.actionTransactionsListToSelectUser())
+    }
 
     /* Actions */
     fun getTransactions() {

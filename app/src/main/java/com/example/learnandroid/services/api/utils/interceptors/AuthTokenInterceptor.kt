@@ -1,7 +1,5 @@
 package com.example.learnandroid.services.api.utils.interceptors
 
-import android.content.SharedPreferences
-import com.example.learnandroid.services.API
 import com.example.learnandroid.services.Preferences
 import com.example.learnandroid.utils.DaggerAppComponent
 import okhttp3.Interceptor
@@ -9,7 +7,7 @@ import okhttp3.Request
 import okhttp3.Response
 import javax.inject.Inject
 
-object AuthTokenInterceptor: Interceptor {
+class AuthTokenInterceptor : Interceptor {
     @Inject lateinit var preferences: Preferences
 
     init {
@@ -22,9 +20,9 @@ object AuthTokenInterceptor: Interceptor {
 
         newRequest = request.newBuilder().build()
 
-        preferences.gettoken.let {
+        preferences.getAuthToken().let {
             newRequest = request.newBuilder()
-                .addHeader("Authorization", "Bearer ")
+                .addHeader("Authorization", "Bearer $it")
                 .build()
         }
 

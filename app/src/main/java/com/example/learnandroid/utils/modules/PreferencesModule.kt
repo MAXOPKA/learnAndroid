@@ -1,13 +1,13 @@
 package com.example.learnandroid.utils.modules
 
-import com.example.learnandroid.services.Database
+import com.example.learnandroid.services.Preferences
 import dagger.Module
 import dagger.Provides
 
 @Module
 class PreferencesModule {
     @Provides
-    fun provideAPIService(): Database {
-        return Database
+    fun providePreferences(): Preferences {
+        return Preferences
     }
 }

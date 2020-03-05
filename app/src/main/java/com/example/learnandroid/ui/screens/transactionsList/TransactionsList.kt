@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +17,7 @@ import com.example.learnandroid.ui.lists.transactions.TransactionsListAdapter
 import com.example.learnandroid.ui.screens.login.LoginViewModel
 import com.example.learnandroid.ui.screens.registration.RegistrationLiveDataModel
 import com.example.learnandroid.ui.utils.baseui.BaseFragment
+import kotlinx.android.synthetic.main.transactions_list_fragment.*
 
 class TransactionsList : BaseFragment() {
 
@@ -43,9 +46,17 @@ class TransactionsList : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
 
         viewManager = LinearLayoutManager(this.activity)
+
+        setNewTransactionButtonAction()
         initLiveData()
 
         transactionsViewModel.getTransactions()
+    }
+
+    private fun setNewTransactionButtonAction() {
+        newTransactionButton?.setOnClickListener {
+            transactionsViewModel.navigateToSelectUser()
+        }
     }
 
     private fun initLiveData() {

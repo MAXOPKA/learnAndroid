@@ -6,26 +6,29 @@ import com.example.learnandroid.App
 import com.example.learnandroid.models.*
 import com.example.learnandroid.services.api.requests.LoginRequest
 import com.example.learnandroid.services.api.requests.RegistrationRequest
-import com.example.learnandroid.services.api.responses.LoginResponse
-import com.example.learnandroid.services.api.responses.RegistrationResponse
-import com.example.learnandroid.services.api.responses.TransactionsResponse
-import com.example.learnandroid.services.api.responses.UserInfoResponse
+import com.example.learnandroid.services.api.requests.UsersRequest
+import com.example.learnandroid.services.api.responses.*
 import com.example.learnandroid.services.api.utils.Endpoints
 import com.example.learnandroid.services.api.utils.interceptors.AuthTokenInterceptor
 import com.example.learnandroid.services.api.utils.interceptors.HttpCodeInterceptor
+import com.example.learnandroid.utils.DaggerAppComponent
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-object API {
-    private const val apiUrl: String = "http://193.124.114.46:3001"
+class API {
+    @Inject lateinit var preferences: Preferences
+
+    private val apiUrl: String = "http://193.124.114.46:3001"
 
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-        .addInterceptor(HttpCodeInterceptor)
-        .addInterceptor(AuthTokenInterceptor)
+        .addInterceptor(HttpCodeInterceptor())
+        .addInterceptor(AuthTokenInterceptor()
+        )
         .build()
 
     private val retrofit: Retrofit = Retrofit.Builder()
@@ -35,37 +38,41 @@ object API {
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 
+    private val api: Endpoints = retrofit.create(Endpoints::class.java)
+
+    init {
+        DaggerAppComponent.create().injectAPI(this)
+    }
+
     /* Queries */
 
     fun registration(requestData: RegistrationRequest): Observable<RegistrationModel> {
-        val api: Endpoints = retrofit.create(Endpoints::class.java)
-
         return api.registration(requestData).map { result ->
             return@map registrationHandler(result)
         }
     }
 
     fun login(requestData: LoginRequest): Observable<LoginModel> {
-        val api: Endpoints = retrofit.create(Endpoints::class.java)
-
         return api.login(requestData).map { result ->
             return@map loginHandler(result)
         }
     }
 
     fun transactions(page: Int, perPage: Int = 20): Observable<TransactionsModel> {
-        val api: Endpoints = retrofit.create(Endpoints::class.java)
-
         return api.transactions().map { result ->
             return@map transactionsHandler(result)
         }
     }
 
     fun userInfo(): Observable<UserInfoModel> {
-        val api: Endpoints = retrofit.create(Endpoints::class.java)
-
         return api.userInfo().map { result ->
             return@map userInfoHandler(result)
+        }
+    }
+
+    fun usersList(key: String): Observable<UsersModel> {
+        return api.usersList(UsersRequest(key)).map { result ->
+            return@map usersHandler(result)
         }
     }
 
@@ -73,7 +80,7 @@ object API {
 
     private fun registrationHandler(response: Response<RegistrationResponse>?): RegistrationModel {
         response?.let {
-            setAuthToken(response.body()?.id_token)
+            preferences.setAuthToken(response.body()?.id_token)
 
             return RegistrationModel(!it.isSuccessful, response.body()?.id_token)
         }
@@ -83,7 +90,7 @@ object API {
 
     private fun loginHandler(response: Response<LoginResponse>?): LoginModel {
         response?.let {
-            setAuthToken(response.body()?.id_token)
+            preferences.setAuthToken(response.body()?.id_token)
 
             return LoginModel(!it.isSuccessful, response.body()?.id_token)
         }
@@ -107,12 +114,23 @@ object API {
             return UserInfoModel(
                 !it.isSuccessful,
                 null,
-                it.body()?.id,
-                it.body()?.name,
-                it.body()?.email,
-                it.body()?.balance)
+                it.body()?.user_info_token?.id,
+                it.body()?.user_info_token?.name,
+                it.body()?.user_info_token?.email,
+                it.body()?.user_info_token?.balance)
         }
 
         return UserInfoModel(true, null)
+    }
+
+    private fun usersHandler(response: Response<UsersResponse>?): UsersModel {
+        response?.let { it ->
+            val users: List<UserModel> =
+                (it.body()?.users?.map { it.toModel() }) ?: emptyList()
+
+            return UsersModel(!it.isSuccessful, null, users)
+        }
+
+        return UsersModel(true, null, null)
     }
 }

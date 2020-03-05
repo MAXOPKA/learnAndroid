@@ -2,10 +2,8 @@ package com.example.learnandroid.services.api.utils
 
 import com.example.learnandroid.services.api.requests.LoginRequest
 import com.example.learnandroid.services.api.requests.RegistrationRequest
-import com.example.learnandroid.services.api.responses.LoginResponse
-import com.example.learnandroid.services.api.responses.RegistrationResponse
-import com.example.learnandroid.services.api.responses.TransactionsResponse
-import com.example.learnandroid.services.api.responses.UserInfoResponse
+import com.example.learnandroid.services.api.requests.UsersRequest
+import com.example.learnandroid.services.api.responses.*
 import io.reactivex.Observable
 import retrofit2.Response
 import retrofit2.http.Body
@@ -28,6 +26,6 @@ interface Endpoints {
     @GET(EndpointsUrls.userInfo)
     fun userInfo(): Observable<Response<UserInfoResponse>>
 
-    @GET(EndpointsUrls.usersList)
-    fun usersList(): Observable<Response<LoginResponse>>
+    @POST(EndpointsUrls.usersList)
+    fun usersList(@Body body: UsersRequest): Observable<Response<UsersResponse>>
 }
