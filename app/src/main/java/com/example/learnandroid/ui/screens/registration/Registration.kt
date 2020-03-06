@@ -85,12 +85,4 @@ class Registration : BaseFragment() {
     private fun setMessageColor(messageType: MessageTypes) {
         messageText.setTextColor(messageType.rgb)
     }
-
-    private fun setOverlayVisiblity(isLoading: Boolean) {
-        if (isLoading) {
-            progressOverlay.visibility = View.VISIBLE
-        } else {
-            progressOverlay.visibility = View.GONE
-        }
-    }
 }

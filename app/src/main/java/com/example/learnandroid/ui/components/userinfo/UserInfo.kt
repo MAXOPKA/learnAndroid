@@ -1,17 +1,12 @@
 package com.example.learnandroid.ui.components.userinfo
 
-import androidx.lifecycle.ViewModelProviders
+import com.example.learnandroid.R
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-
-import com.example.learnandroid.R
-import com.example.learnandroid.ui.screens.login.LoginLiveDataModel
-import com.example.learnandroid.ui.screens.registration.RegistrationLiveDataModel
-import com.example.learnandroid.ui.screens.transactionsList.TransactionsListViewModel
+import androidx.lifecycle.ViewModelProviders
 import com.example.learnandroid.ui.utils.baseui.BaseFragment
 import kotlinx.android.synthetic.main.user_info_fragment.*
 
@@ -29,14 +24,17 @@ class UserInfo : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.user_info_fragment, container, false)
+        val userInfoView = inflater.inflate(R.layout.select_user_fragment, container, false)
+       // val binding: UserInfoFragmentBinding = DataBindingUtil.inflate(inflater, R.layout.select_user_fragment, container, false)
+//        binding.setViewModel(userInfoViewModel.userInfo)
+        return userInfoView
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         viewModel = ViewModelProviders.of(this).get(UserInfoViewModel::class.java)
 
         super.onActivityCreated(savedInstanceState)
-        initLiveData()
+        // initLiveData()
 
         userInfoViewModel.getUserInfo()
     }

@@ -9,6 +9,11 @@ import io.reactivex.schedulers.Schedulers
 
 class UserInfoViewModel : BaseViewModel() {
 
+    var userInfo: UserInfoModel = UserInfoModel(
+        false,
+        ""
+    )
+
     private var liveDataModel = MutableLiveData<UserInfoLiveDataModel>(
         UserInfoLiveDataModel(false, null, null)
     )

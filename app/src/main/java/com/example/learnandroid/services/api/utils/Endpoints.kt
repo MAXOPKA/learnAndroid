@@ -27,5 +27,5 @@ interface Endpoints {
     fun userInfo(): Observable<Response<UserInfoResponse>>
 
     @POST(EndpointsUrls.usersList)
-    fun usersList(@Body body: UsersRequest): Observable<Response<UsersResponse>>
+    fun usersList(@Body body: UsersRequest): Observable<Response<List<User>>>
 }

@@ -1,18 +1,18 @@
 package com.example.learnandroid.ui.components.searchbar
 
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
+import io.reactivex.Emitter
 import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 class SearchBarViewModel : BaseViewModel() {
-    val key: String = ""
+    private var emitter: Emitter<String>? = null
 
     val output: Observable<String> = Observable.create<String> { emitter ->
-        postKey() {
-            emitter.onNext(it)
-        }
-    }
+        this.emitter = emitter
+    }.debounce(1L, TimeUnit.SECONDS)
 
-    fun postKey(emit: (key: String) -> Unit) {
-        emit(key)
+    fun postKey(searchKey: String) {
+        emitter?.onNext(searchKey)
     }
 }

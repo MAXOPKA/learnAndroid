@@ -13,6 +13,7 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.example.learnandroid.R
 import com.example.learnandroid.ui.utils.MessageTypes
 import com.example.learnandroid.ui.utils.baseui.BaseFragment
+import kotlinx.android.synthetic.main.loader.*
 import kotlinx.android.synthetic.main.login_fragment.*
 
 class Login : BaseFragment() {
@@ -69,7 +70,7 @@ class Login : BaseFragment() {
     fun setData(liveDataModel: LoginLiveDataModel) {
         setMessageText(liveDataModel.messageText)
         setMessageColor(liveDataModel.messageType)
-        setOverlayVisiblity(liveDataModel.isLoading)
+        super.setOverlayVisiblity(liveDataModel.isLoading)
     }
 
     private fun setMessageText(text: String?) {
@@ -84,13 +85,5 @@ class Login : BaseFragment() {
 
     private fun setMessageColor(messageType: MessageTypes) {
         // messageText.setTextColor(messageType.rgb)
-    }
-
-    private fun setOverlayVisiblity(isLoading: Boolean) {
-        if (isLoading) {
-            progressOverlay.visibility = View.VISIBLE
-        } else {
-            progressOverlay.visibility = View.GONE
-        }
     }
 }

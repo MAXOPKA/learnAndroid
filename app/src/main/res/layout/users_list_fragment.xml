@@ -3,8 +3,12 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".ui.components.usersList.UsersList">
-
-
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/usersList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+    />
+    <include layout="@layout/loader" />
 </FrameLayout>

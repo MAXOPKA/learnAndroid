@@ -68,21 +68,5 @@
                         android:visibility="gone"
                 />
         </LinearLayout>
-        <FrameLayout
-                android:id="@+id/progressOverlay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0.75"
-                android:background="@android:color/black"
-                android:clickable="true"
-                android:visibility="gone">
-                <ProgressBar
-                        android:id="@+id/progressBar"
-                        style="?android:attr/progressBarStyleLarge"
-                        android:indeterminateTint="@android:color/holo_green_dark"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:indeterminate="true"/>
-        </FrameLayout>
+        <include layout="@layout/loader" />
 </RelativeLayout>

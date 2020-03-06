@@ -6,6 +6,5 @@ import com.example.learnandroid.ui.screens.login.LoginDirections
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 
 class SelectUserViewModel() : BaseViewModel() {
-    var usersListViewModel: UsersListViewModel? = null
-    var searchBarViewModel: SearchBarViewModel? = null
+
 }

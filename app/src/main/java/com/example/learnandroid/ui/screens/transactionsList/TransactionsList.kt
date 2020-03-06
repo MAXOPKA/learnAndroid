@@ -68,6 +68,8 @@ class TransactionsList : BaseFragment() {
     }
 
     private fun setData(dataModel: TransactionsListLiveDataModel) {
+        setOverlayVisiblity(dataModel.isLoading)
+
         viewAdapter = TransactionsListAdapter(dataModel.transactions.toTypedArray())
 
         recyclerView = view!!.findViewById<RecyclerView>(R.id.transactionsList).apply {

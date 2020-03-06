@@ -28,6 +28,10 @@ class TransactionsListViewModel : BaseViewModel() {
 
     /* Actions */
     fun getTransactions() {
+        liveDataModel.value = liveDataModel.value?.apply {
+            isLoading = true
+        }
+
         apiService.transactions(1)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -41,10 +45,15 @@ class TransactionsListViewModel : BaseViewModel() {
 
     /*  Handlers */
     private fun getTransactionsHandler(result: TransactionsModel) {
-        liveDataModel.value = liveDataModel.value?.apply { transactions = result.transactionsList ?: emptyList() }
+        liveDataModel.value = liveDataModel.value?.apply {
+            transactions = result.transactionsList ?: emptyList()
+            isLoading = false
+        }
     }
 
     private fun getTransactionsErrorHandler() {
-
+        liveDataModel.value = liveDataModel.value?.apply {
+            isLoading = false
+        }
     }
 }

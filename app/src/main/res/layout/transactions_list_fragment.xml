@@ -18,6 +18,7 @@
                     android:layout_weight="1"
                     android:fillViewport="true"
             />
+            <include layout="@layout/loader" />
         <Button
                 android:id="@+id/newTransactionButton"
                 android:layout_width="match_parent"

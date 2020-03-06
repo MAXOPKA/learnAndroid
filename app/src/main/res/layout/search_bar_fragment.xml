@@ -6,9 +6,11 @@
         android:layout_height="match_parent"
         tools:context=".ui.components.searchbar.SearchBar">
 
-    <TextView
+    <EditText
+            android:id="@+id/searchKeyText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Hello"/>
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="2dp"
+            android:layout_marginHorizontal="8dp"/>
 
 </FrameLayout>

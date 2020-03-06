@@ -123,10 +123,10 @@ class API {
         return UserInfoModel(true, null)
     }
 
-    private fun usersHandler(response: Response<UsersResponse>?): UsersModel {
+    private fun usersHandler(response: Response<List<User>>?): UsersModel {
         response?.let { it ->
             val users: List<UserModel> =
-                (it.body()?.users?.map { it.toModel() }) ?: emptyList()
+                (it.body()?.map { it.toModel() }) ?: emptyList()
 
             return UsersModel(!it.isSuccessful, null, users)
         }
