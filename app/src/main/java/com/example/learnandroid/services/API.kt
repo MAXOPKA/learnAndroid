@@ -76,6 +76,12 @@ class API {
         }
     }
 
+    fun logout(): Observable<UsersModel> {
+        return api.usersList(UsersRequest(key)).map { result ->
+            return@map usersHandler(result)
+        }
+    }
+
     /* Handlers */
 
     private fun registrationHandler(response: Response<RegistrationResponse>?): RegistrationModel {

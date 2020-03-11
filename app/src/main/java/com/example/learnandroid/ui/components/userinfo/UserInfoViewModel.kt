@@ -11,7 +11,11 @@ class UserInfoViewModel : BaseViewModel() {
 
     var userInfo: UserInfoModel = UserInfoModel(
         false,
-        ""
+        "",
+        0,
+        "",
+        "",
+        0.0
     )
 
     private var liveDataModel = MutableLiveData<UserInfoLiveDataModel>(
@@ -34,15 +38,26 @@ class UserInfoViewModel : BaseViewModel() {
             })
     }
 
+    fun logout() {
+        
+    }
+
     private fun getUserInfoHandler(result: UserInfoModel) {
-        liveDataModel.value = liveDataModel.value?.apply {
-            this.error = result.error
+        userInfo.apply {
+            error = result.error
             name = result.name
-            balance = result.balance.toString()
+            balance = result.balance
         }
+
+//        liveDataModel.value = liveDataModel.value?.apply {
+//            this.error = result.error
+//            name = result.name
+//            balance = result.balance.toString()
+//        }
     }
 
     private fun getUserInfoErrorHandler(error: Throwable) {
-        liveDataModel.value = liveDataModel.value?.apply { this.error = true }
+        userInfo.error = true
+//        liveDataModel.value = liveDataModel.value?.apply { this.error = true }
     }
 }

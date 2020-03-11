@@ -9,7 +9,7 @@
 
     <fragment
             android:id="@+id/user_info_fragment"
-            android:name="com.example.learnandroid.ui.components.userinfo.UserInfo"
+            class="com.example.learnandroid.ui.components.userinfo.UserInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
