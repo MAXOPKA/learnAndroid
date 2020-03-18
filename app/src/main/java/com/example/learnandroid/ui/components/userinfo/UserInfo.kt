@@ -40,6 +40,7 @@ class UserInfo : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         // initLiveData()
         binding.userInfoModel = userInfoViewModel.userInfo
+        binding.userInfoViewoModel = userInfoViewModel
         userInfoViewModel.getUserInfo()
     }
 
@@ -55,7 +56,7 @@ class UserInfo : BaseFragment() {
 
     }
 
-    public fun onClickLogout() {
-        userInfoViewModel.logout()
-    }
+//    public fun onClickLogout() {
+//        userInfoViewModel.logout()
+//    }
 }

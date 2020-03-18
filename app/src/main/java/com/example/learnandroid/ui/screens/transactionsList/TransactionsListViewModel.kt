@@ -1,20 +1,11 @@
 package com.example.learnandroid.ui.screens.transactionsList
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.learnandroid.models.TransactionModel
 import com.example.learnandroid.models.TransactionsModel
-import com.example.learnandroid.services.API
-import com.example.learnandroid.services.Database
-import com.example.learnandroid.services.api.responses.Transaction
-import com.example.learnandroid.ui.screens.login.LoginDirections
-import com.example.learnandroid.ui.screens.registration.RegistrationLiveDataModel
-import com.example.learnandroid.ui.utils.MessageTypes
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import com.example.learnandroid.utils.DaggerAppComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
 class TransactionsListViewModel : BaseViewModel() {
     var liveDataModel = MutableLiveData<TransactionsListLiveDataModel>(

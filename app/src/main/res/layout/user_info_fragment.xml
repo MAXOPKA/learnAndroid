@@ -8,7 +8,9 @@
         <variable
                 name="userInfoModel"
                 type="com.example.learnandroid.models.UserInfoModel" />
-
+        <variable
+                name="userInfoViewoModel"
+                type="com.example.learnandroid.ui.components.userinfo.UserInfoViewModel" />
     </data>
     <LinearLayout
             android:visibility="visible"
@@ -48,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Выход"
-            android:onClick="@{() -> handler.onClickLogout()}"
+            android:onClick="@{userInfoViewoModel::logout}"
         >
         </Button>
     </LinearLayout>

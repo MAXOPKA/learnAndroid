@@ -1,18 +1,13 @@
 package com.example.learnandroid.ui.screens.registration
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.learnandroid.models.RegistrationModel
-import com.example.learnandroid.services.API
-import com.example.learnandroid.services.Database
 import com.example.learnandroid.services.api.requests.RegistrationRequest
-import com.example.learnandroid.ui.screens.login.LoginDirections
 import com.example.learnandroid.ui.utils.MessageTypes
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import com.example.learnandroid.utils.DaggerAppComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
 
 
 class RegistrationViewModel() : BaseViewModel() {

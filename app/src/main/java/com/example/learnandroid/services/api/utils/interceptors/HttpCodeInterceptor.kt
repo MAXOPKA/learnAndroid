@@ -1,5 +1,6 @@
 package com.example.learnandroid.services.api.utils.interceptors
 
+import com.example.learnandroid.services.IPreferences
 import com.example.learnandroid.services.Preferences
 import com.example.learnandroid.services.api.utils.exceptions.BadRequestException
 import com.example.learnandroid.services.api.utils.exceptions.InternalServerErrorException
@@ -10,7 +11,7 @@ import okhttp3.Response
 import javax.inject.Inject
 
 class HttpCodeInterceptor: Interceptor {
-    @Inject lateinit var preferences: Preferences
+    @Inject lateinit var preferences: IPreferences
 
     init {
         DaggerAppComponent.create().injectHttpCodeInterceptor(this)

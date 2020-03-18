@@ -1,5 +1,6 @@
 package com.example.learnandroid.ui.components.userinfo
 
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.example.learnandroid.models.UserInfoModel
 import com.example.learnandroid.ui.screens.login.LoginLiveDataModel
@@ -38,8 +39,8 @@ class UserInfoViewModel : BaseViewModel() {
             })
     }
 
-    fun logout() {
-        
+    public fun logout(view: View) {
+        val a = 4
     }
 
     private fun getUserInfoHandler(result: UserInfoModel) {

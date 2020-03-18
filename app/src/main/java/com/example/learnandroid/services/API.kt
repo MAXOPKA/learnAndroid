@@ -20,8 +20,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-class API {
-    @Inject lateinit var preferences: Preferences
+class API : IAPI {
+    @Inject lateinit var preferences: IPreferences
 
     private val apiUrl: String = "http://193.124.114.46:3001"
 
@@ -46,37 +46,31 @@ class API {
 
     /* Queries */
 
-    fun registration(requestData: RegistrationRequest): Observable<RegistrationModel> {
+    override fun registration(requestData: RegistrationRequest): Observable<RegistrationModel> {
         return api.registration(requestData).map { result ->
             return@map registrationHandler(result)
         }
     }
 
-    fun login(requestData: LoginRequest): Observable<LoginModel> {
+    override fun login(requestData: LoginRequest): Observable<LoginModel> {
         return api.login(requestData).map { result ->
             return@map loginHandler(result)
         }
     }
 
-    fun transactions(page: Int, perPage: Int = 20): Observable<TransactionsModel> {
+    override fun transactions(page: Int, perPage: Int): Observable<TransactionsModel> {
         return api.transactions().map { result ->
             return@map transactionsHandler(result)
         }
     }
 
-    fun userInfo(): Observable<UserInfoModel> {
+    override fun userInfo(): Observable<UserInfoModel> {
         return api.userInfo().map { result ->
             return@map userInfoHandler(result)
         }
     }
 
-    fun usersList(key: String): Observable<UsersModel> {
-        return api.usersList(UsersRequest(key)).map { result ->
-            return@map usersHandler(result)
-        }
-    }
-
-    fun logout(): Observable<UsersModel> {
+    override fun usersList(key: String): Observable<UsersModel> {
         return api.usersList(UsersRequest(key)).map { result ->
             return@map usersHandler(result)
         }
