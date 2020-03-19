@@ -2,12 +2,16 @@ package com.example.learnandroid.ui.components.usersList
 
 import androidx.lifecycle.MutableLiveData
 import com.example.learnandroid.models.UsersModel
+import com.example.learnandroid.services.IAPI
+import com.example.learnandroid.services.IPreferences
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class UsersListViewModel : BaseViewModel() {
+class UsersListViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService,
+    preferencesService
+) {
     var liveDataModel = MutableLiveData<UsersListLiveDataModel>(
         UsersListLiveDataModel(emptyList(), false, false)
     )

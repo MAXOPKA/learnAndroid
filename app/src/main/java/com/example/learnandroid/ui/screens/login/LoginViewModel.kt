@@ -2,6 +2,8 @@ package com.example.learnandroid.ui.screens.login
 
 import androidx.lifecycle.MutableLiveData
 import com.example.learnandroid.models.LoginModel
+import com.example.learnandroid.services.IAPI
+import com.example.learnandroid.services.IPreferences
 import com.example.learnandroid.services.api.requests.LoginRequest
 import com.example.learnandroid.ui.utils.MessageTypes
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
@@ -9,7 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class LoginViewModel : BaseViewModel() {
+class LoginViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService, preferencesService) {
     private var liveDataModel = MutableLiveData<LoginLiveDataModel>(LoginLiveDataModel(
         null,
         MessageTypes.ERROR,
@@ -39,7 +41,7 @@ class LoginViewModel : BaseViewModel() {
             return
         }
 
-        liveDataModel.value = liveDataModel.value?.apply { isLoading = true }
+        liveDataModel.postValue(liveDataModel.value?.apply { isLoading = true })
         val loginData = LoginRequest(email, password)
 
         apiService.login(loginData)
@@ -68,8 +70,8 @@ class LoginViewModel : BaseViewModel() {
             liveDataModel.value?.messageText = "Success!"
         }
 
-        liveDataModel.postValue(liveDataModel.value)
-        navigateToTransactions()
+        // liveDataModel.postValue(liveDataModel.value)
+        // navigateToTransactions()
     }
 
     private fun loginErrorHandler(error: Throwable) {
@@ -77,7 +79,7 @@ class LoginViewModel : BaseViewModel() {
         liveDataModel.value?.messageText = "Error"
         liveDataModel.value?.messageType = MessageTypes.ERROR
 
-        liveDataModel.postValue(liveDataModel.value)
+        // liveDataModel.postValue(liveDataModel.value)
     }
 
     /* Validators */

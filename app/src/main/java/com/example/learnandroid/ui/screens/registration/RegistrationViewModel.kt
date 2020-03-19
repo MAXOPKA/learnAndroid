@@ -2,6 +2,8 @@ package com.example.learnandroid.ui.screens.registration
 
 import androidx.lifecycle.MutableLiveData
 import com.example.learnandroid.models.RegistrationModel
+import com.example.learnandroid.services.IAPI
+import com.example.learnandroid.services.IPreferences
 import com.example.learnandroid.services.api.requests.RegistrationRequest
 import com.example.learnandroid.ui.utils.MessageTypes
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
@@ -10,7 +12,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class RegistrationViewModel() : BaseViewModel() {
+class RegistrationViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService,
+    preferencesService
+) {
     var liveDataModel = MutableLiveData<RegistrationLiveDataModel>(RegistrationLiveDataModel(
         null,
         MessageTypes.ERROR,

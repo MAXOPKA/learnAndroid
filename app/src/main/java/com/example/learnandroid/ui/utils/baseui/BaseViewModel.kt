@@ -11,13 +11,10 @@ import com.example.learnandroid.utils.DaggerAppComponent
 import javax.inject.Inject
 import kotlin.reflect.typeOf
 
-open class BaseViewModel : ViewModel() {
-    @Inject lateinit var apiService: IAPI
-    @Inject lateinit var preferencesService: IPreferences
-
-    init {
-        DaggerAppComponent.create().injectBaseViewModel(this)
-    }
+open class BaseViewModel @Inject constructor (
+    internal val apiService: IAPI,
+    private var preferencesService: IPreferences
+) : ViewModel() {
 
     private val navigationCommand = MutableLiveData<NavigationCommand>()
 

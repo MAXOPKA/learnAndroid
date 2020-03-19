@@ -3,12 +3,16 @@ package com.example.learnandroid.ui.components.userinfo
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.example.learnandroid.models.UserInfoModel
+import com.example.learnandroid.services.IAPI
+import com.example.learnandroid.services.IPreferences
 import com.example.learnandroid.ui.screens.login.LoginLiveDataModel
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class UserInfoViewModel : BaseViewModel() {
+class UserInfoViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService,
+    preferencesService
+) {
 
     var userInfo: UserInfoModel = UserInfoModel(
         false,

@@ -2,12 +2,16 @@ package com.example.learnandroid.ui.screens.transactionsList
 
 import androidx.lifecycle.MutableLiveData
 import com.example.learnandroid.models.TransactionsModel
+import com.example.learnandroid.services.IAPI
+import com.example.learnandroid.services.IPreferences
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import com.example.learnandroid.utils.DaggerAppComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class TransactionsListViewModel : BaseViewModel() {
+class TransactionsListViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService,
+    preferencesService
+) {
     var liveDataModel = MutableLiveData<TransactionsListLiveDataModel>(
         TransactionsListLiveDataModel(emptyList())
     )
