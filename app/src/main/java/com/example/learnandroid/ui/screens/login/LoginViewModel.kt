@@ -70,8 +70,8 @@ class LoginViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseV
             liveDataModel.value?.messageText = "Success!"
         }
 
-        // liveDataModel.postValue(liveDataModel.value)
-        // navigateToTransactions()
+        liveDataModel.postValue(liveDataModel.value)
+        navigateToTransactions()
     }
 
     private fun loginErrorHandler(error: Throwable) {
@@ -79,7 +79,7 @@ class LoginViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseV
         liveDataModel.value?.messageText = "Error"
         liveDataModel.value?.messageType = MessageTypes.ERROR
 
-        // liveDataModel.postValue(liveDataModel.value)
+        liveDataModel.postValue(liveDataModel.value)
     }
 
     /* Validators */

@@ -4,11 +4,9 @@ import com.example.learnandroid.models.*
 import com.example.learnandroid.services.IAPI
 import com.example.learnandroid.services.api.requests.LoginRequest
 import com.example.learnandroid.services.api.requests.RegistrationRequest
-import com.example.learnandroid.utils.RxImmediateSchedulerRule
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.Schedulers
-import org.junit.Rule
 
 class APIMock : IAPI {
     override fun registration(requestData: RegistrationRequest): Observable<RegistrationModel> {
@@ -20,7 +18,7 @@ class APIMock : IAPI {
     }
 
     override fun login(requestData: LoginRequest): Observable<LoginModel> {
-        val result = Observable.just(LoginModel(error = true, errorMessage = "Bad request")).observeOn(Schedulers.trampoline())
+        val result = Observable.just(LoginModel(error = false, errorMessage = null))
 
         return result
     }

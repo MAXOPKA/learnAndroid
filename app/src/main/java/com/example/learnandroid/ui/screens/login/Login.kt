@@ -69,7 +69,7 @@ class Login : BaseFragment() {
 
     fun setData(liveDataModel: LoginLiveDataModel) {
         setMessageText(liveDataModel.messageText)
-        setMessageColor(liveDataModel.messageType)
+        liveDataModel.messageType?.let { setMessageColor(it) }
         super.setOverlayVisiblity(liveDataModel.isLoading)
     }
 
@@ -84,6 +84,6 @@ class Login : BaseFragment() {
     }
 
     private fun setMessageColor(messageType: MessageTypes) {
-        // messageText.setTextColor(messageType.rgb)
+        messageText.setTextColor(messageType.rgb)
     }
 }
