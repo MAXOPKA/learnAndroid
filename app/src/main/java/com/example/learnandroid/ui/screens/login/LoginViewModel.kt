@@ -11,7 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class LoginViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService, preferencesService) {
+class LoginViewModel() : BaseViewModel() {
     private var liveDataModel = MutableLiveData<LoginLiveDataModel>(LoginLiveDataModel(
         null,
         MessageTypes.ERROR,
@@ -22,6 +22,15 @@ class LoginViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseV
         if (preferencesService.getAuthToken() != null) {
             navigateToTransactions()
         }
+
+        apiService.loginOutput
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe ({ result ->
+                loginHandler(result)
+            }, { error ->
+                loginErrorHandler(error)
+            })
     }
 
     /* Navigation */
@@ -45,13 +54,6 @@ class LoginViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseV
         val loginData = LoginRequest(email, password)
 
         apiService.login(loginData)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ result ->
-                loginHandler(result)
-            }, { error ->
-                loginErrorHandler(error)
-            })
     }
 
     fun getLoginData(): MutableLiveData<LoginLiveDataModel>? {

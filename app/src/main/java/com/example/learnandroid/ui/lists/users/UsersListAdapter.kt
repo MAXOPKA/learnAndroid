@@ -7,7 +7,8 @@ import com.example.learnandroid.R
 import com.example.learnandroid.models.UserModel
 import com.example.learnandroid.ui.lists.transactions.TransactionViewHolder
 
-class UsersListAdapter(val users: List<UserModel>) : RecyclerView.Adapter<UserViewHolder>() {
+class UsersListAdapter(val users: List<UserModel>, val itemClickListener: OnItemClickListener)
+    : RecyclerView.Adapter<UserViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_users_list_item, parent, false)
@@ -21,6 +22,11 @@ class UsersListAdapter(val users: List<UserModel>) : RecyclerView.Adapter<UserVi
         val name = users[position].name
         val id = users[position].id
 
-        holder.nameTextView.text = "$name($id)"
+        holder.bind(users[position], itemClickListener)
+        holder.nameTextView.text = "$name(ID $id)"
     }
+}
+
+interface OnItemClickListener{
+    fun onItemClicked(user: UserModel)
 }

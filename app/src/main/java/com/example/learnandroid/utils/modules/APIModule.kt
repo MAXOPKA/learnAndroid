@@ -9,7 +9,8 @@ import javax.inject.Singleton
 @Module
 class APIModule {
     @Provides
-    fun provideAPIService(): IAPI {
+    @Singleton
+    fun provideAPIService(): API {
         return API()
     }
 }

@@ -35,7 +35,10 @@ class LoginViewModelUnitTest {
 
     @BeforeEach
     fun prepare() {
-        underTest = LoginViewModel(apiService, preferencesService)
+        underTest = LoginViewModel()
+        underTest.apiService = apiService
+        underTest.preferencesService = preferencesService
+
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
     }
 

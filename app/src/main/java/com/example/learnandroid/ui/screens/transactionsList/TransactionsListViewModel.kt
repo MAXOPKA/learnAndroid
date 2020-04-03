@@ -9,12 +9,22 @@ import com.example.learnandroid.utils.DaggerAppComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class TransactionsListViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService,
-    preferencesService
-) {
+class TransactionsListViewModel() : BaseViewModel() {
     var liveDataModel = MutableLiveData<TransactionsListLiveDataModel>(
         TransactionsListLiveDataModel(emptyList())
     )
+
+    init {
+        apiService.transactionsOutput
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe ({ result ->
+                getTransactionsHandler(result)
+            }, { error ->
+                super.errorHandler(error)
+                getTransactionsErrorHandler()
+            })
+    }
 
     /* Navigation */
     fun navigateToSelectUser() {
@@ -28,14 +38,6 @@ class TransactionsListViewModel(apiService: IAPI, preferencesService: IPreferenc
         }
 
         apiService.transactions(1)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ result ->
-                getTransactionsHandler(result)
-            }, { error ->
-                super.errorHandler(error)
-                getTransactionsErrorHandler()
-            })
     }
 
     /*  Handlers */

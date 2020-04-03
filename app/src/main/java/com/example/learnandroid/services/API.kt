@@ -1,9 +1,7 @@
 package com.example.learnandroid.services
 
-import android.content.SharedPreferences
-import androidx.preference.PreferenceManager
-import com.example.learnandroid.App
 import com.example.learnandroid.models.*
+import com.example.learnandroid.services.api.requests.CreateTransactionRequest
 import com.example.learnandroid.services.api.requests.LoginRequest
 import com.example.learnandroid.services.api.requests.RegistrationRequest
 import com.example.learnandroid.services.api.requests.UsersRequest
@@ -12,16 +10,21 @@ import com.example.learnandroid.services.api.utils.Endpoints
 import com.example.learnandroid.services.api.utils.interceptors.AuthTokenInterceptor
 import com.example.learnandroid.services.api.utils.interceptors.HttpCodeInterceptor
 import com.example.learnandroid.utils.DaggerAppComponent
-import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
+import javax.inject.Singleton
 
-class API : IAPI {
-    @Inject lateinit var preferences: IPreferences
+@Singleton
+class API {
+    @Inject
+    lateinit var preferences: IPreferences
 
     private val apiUrl: String = "http://193.124.114.46:3001"
 
@@ -40,97 +43,158 @@ class API : IAPI {
 
     private val api: Endpoints = retrofit.create(Endpoints::class.java)
 
+    /* Outputs */
+
+    val registrationOutput: PublishSubject<RegistrationModel> = PublishSubject.create()
+    val loginOutput: PublishSubject<LoginModel> = PublishSubject.create()
+    val transactionsOutput: PublishSubject<TransactionsModel> = PublishSubject.create()
+    val userInfoOutput: PublishSubject<UserInfoModel> = PublishSubject.create()
+    val usersListOutput: PublishSubject<UsersModel> = PublishSubject.create()
+    val createTransactionOutput: PublishSubject<CreateTransactionModel> = PublishSubject.create()
+
     init {
         DaggerAppComponent.create().injectAPI(this)
     }
 
     /* Queries */
 
-    override fun registration(requestData: RegistrationRequest): Observable<RegistrationModel> {
-        return api.registration(requestData).map { result ->
-            return@map registrationHandler(result)
-        }
+    fun registration(requestData: RegistrationRequest) {
+        api.registration(requestData)
+            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+            registrationHandler(it)
+        }, {
+            registrationOutput.onError(it)
+        })
     }
 
-    override fun login(requestData: LoginRequest): Observable<LoginModel> {
-        return api.login(requestData).map { result ->
-            return@map loginHandler(result)
-        }
+    fun login(requestData: LoginRequest) {
+        api.login(requestData)
+            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+            loginHandler(it)
+        }, {
+            loginOutput.onError(it)
+        })
     }
 
-    override fun transactions(page: Int, perPage: Int): Observable<TransactionsModel> {
-        return api.transactions().map { result ->
-            return@map transactionsHandler(result)
-        }
+    fun transactions(page: Int, perPage: Int = 20) {
+        api.transactions()
+            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+            transactionsHandler(it)
+        }, {
+            transactionsOutput.onError(it)
+        })
     }
 
-    override fun userInfo(): Observable<UserInfoModel> {
-        return api.userInfo().map { result ->
-            return@map userInfoHandler(result)
-        }
+    fun userInfo() {
+        api.userInfo()
+            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+            userInfoHandler(it)
+        }, {
+            userInfoOutput.onError(it)
+        })
     }
 
-    override fun usersList(key: String): Observable<UsersModel> {
-        return api.usersList(UsersRequest(key)).map { result ->
-            return@map usersHandler(result)
-        }
+    fun usersList(key: String) {
+        api.usersList(UsersRequest(key))
+            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                usersHandler(it)
+            }, {
+                usersListOutput.onError(it)
+            })
+    }
+
+    fun createTransaction(userName: String, amount: Double) {
+        api.transactions(CreateTransactionRequest(userName, amount))
+            .observeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
+            .subscribe({
+                createTransactionHandler(it)
+            }, {
+                createTransactionOutput.onError(it)
+            })
     }
 
     /* Handlers */
 
-    private fun registrationHandler(response: Response<RegistrationResponse>?): RegistrationModel {
+    private fun registrationHandler(response: Response<RegistrationResponse>?) {
         response?.let {
             preferences.setAuthToken(response.body()?.id_token)
+            registrationOutput.onNext(RegistrationModel(!it.isSuccessful, response.body()?.id_token))
 
-            return RegistrationModel(!it.isSuccessful, response.body()?.id_token)
+            return
         }
 
-        return RegistrationModel(true, null)
+        registrationOutput.onNext(RegistrationModel(true, null))
     }
 
-    private fun loginHandler(response: Response<LoginResponse>?): LoginModel {
+    private fun loginHandler(response: Response<LoginResponse>?) {
         response?.let {
             preferences.setAuthToken(response.body()?.id_token)
+            loginOutput.onNext(LoginModel(!it.isSuccessful, response.body()?.id_token))
 
-            return LoginModel(!it.isSuccessful, response.body()?.id_token)
+            return
         }
 
-        return LoginModel(true, null)
+        loginOutput.onNext(LoginModel(true, null))
     }
 
-    private fun transactionsHandler(response: Response<TransactionsResponse>?): TransactionsModel {
+    private fun transactionsHandler(response: Response<TransactionsResponse>?) {
         response?.let { it ->
-            val transactions: List<TransactionModel> =
-                it.body()?.trans_token?.map { it.toModel() } ?: emptyList()
+            val transactions: List<TransactionModel> = it.body()?.trans_token?.map { it.toModel() } ?: emptyList()
 
-            return TransactionsModel(!it.isSuccessful, null, transactions)
+            transactionsOutput.onNext(TransactionsModel(!it.isSuccessful, null, transactions))
+
+            return
         }
 
-        return TransactionsModel(true, null, null)
+        transactionsOutput.onNext(TransactionsModel(true, null, null))
     }
 
-    private fun userInfoHandler(response: Response<UserInfoResponse>?): UserInfoModel {
+    private fun userInfoHandler(response: Response<UserInfoResponse>?) {
         response?.let { it ->
-            return UserInfoModel(
+            userInfoOutput.onNext(UserInfoModel(
                 !it.isSuccessful,
                 null,
                 it.body()?.user_info_token?.id,
                 it.body()?.user_info_token?.name,
                 it.body()?.user_info_token?.email,
-                it.body()?.user_info_token?.balance)
+                it.body()?.user_info_token?.balance))
+
+            return
         }
 
-        return UserInfoModel(true, null)
+        userInfoOutput.onNext(UserInfoModel(true, null))
     }
 
-    private fun usersHandler(response: Response<List<User>>?): UsersModel {
+    private fun usersHandler(response: Response<List<User>>?) {
         response?.let { it ->
             val users: List<UserModel> =
                 (it.body()?.map { it.toModel() }) ?: emptyList()
+            usersListOutput.onNext(UsersModel(!it.isSuccessful, null, users))
 
-            return UsersModel(!it.isSuccessful, null, users)
+            return
         }
 
-        return UsersModel(true, null, null)
+        usersListOutput.onNext(UsersModel(true, null, null))
+    }
+
+    private fun createTransactionHandler(response: Response<CreateTransactionResponse>?) {
+        response?.let { it ->
+            createTransactionOutput.onNext(CreateTransactionModel(!it.isSuccessful, null, it.body()?.trans_token?.balance))
+
+            return
+        }
+
+        createTransactionOutput.onNext(CreateTransactionModel(true, null))
     }
 }

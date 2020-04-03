@@ -5,18 +5,13 @@ import com.example.learnandroid.services.IPreferences
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import io.reactivex.Emitter
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 
-class SearchBarViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService,
-    preferencesService
-) {
-    private var emitter: Emitter<String>? = null
-
-    val output: Observable<String> = Observable.create<String> { emitter ->
-        this.emitter = emitter
-    }.debounce(1L, TimeUnit.SECONDS)
+class SearchBarViewModel() : BaseViewModel() {
+    val output: PublishSubject<String> = PublishSubject.create()
 
     fun postKey(searchKey: String) {
-        emitter?.onNext(searchKey)
+        output.onNext(searchKey)
     }
 }

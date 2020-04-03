@@ -12,14 +12,23 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class RegistrationViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService,
-    preferencesService
-) {
+class RegistrationViewModel() : BaseViewModel() {
     var liveDataModel = MutableLiveData<RegistrationLiveDataModel>(RegistrationLiveDataModel(
         null,
         MessageTypes.ERROR,
         false
     ))
+
+    init {
+        apiService.registrationOutput
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe ({ result ->
+                registrationHandler(result)
+            }, { error ->
+                registrationErrorHandler(error)
+            })
+    }
 
     /* Navigation */
 
@@ -42,13 +51,6 @@ class RegistrationViewModel(apiService: IAPI, preferencesService: IPreferences) 
         val registrationData = RegistrationRequest(name, email, password)
 
         apiService.registration(registrationData)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ result ->
-                registrationHandler(result)
-            }, { error ->
-                registrationErrorHandler(error)
-            })
     }
 
     /* Handlers */

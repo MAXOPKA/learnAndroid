@@ -2,6 +2,7 @@ package com.example.learnandroid
 
 import android.app.Application
 import android.content.Context
+import dagger.android.AndroidInjection
 
 
 class App: Application() {

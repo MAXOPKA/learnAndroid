@@ -20,5 +20,13 @@
         <action android:id="@+id/action_transactionsList_to_selectUser" app:destination="@id/selectUser"/>
     </fragment>
     <fragment android:id="@+id/selectUser" android:name="com.example.learnandroid.ui.screens.selectUser.SelectUser"
-              android:label="SelectUser"/>
+              android:label="SelectUser">
+        <action android:id="@+id/action_selectUser_to_confirmTransaction" app:destination="@id/confirmTransaction"/>
+    </fragment>
+    <fragment android:id="@+id/confirmTransaction"
+              android:name="com.example.learnandroid.ui.screens.confirmTransaction.ConfirmTransaction"
+              android:label="ConfirmTransaction">
+        <action android:id="@+id/action_confirmTransaction_to_transactionsList" app:destination="@id/transactionsList"
+                app:popUpTo="@+id/transactionsList"/>
+    </fragment>
 </navigation>

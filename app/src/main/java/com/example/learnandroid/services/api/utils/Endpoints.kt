@@ -1,5 +1,6 @@
 package com.example.learnandroid.services.api.utils
 
+import com.example.learnandroid.services.api.requests.CreateTransactionRequest
 import com.example.learnandroid.services.api.requests.LoginRequest
 import com.example.learnandroid.services.api.requests.RegistrationRequest
 import com.example.learnandroid.services.api.requests.UsersRequest
@@ -21,7 +22,7 @@ interface Endpoints {
     fun transactions(): Observable<Response<TransactionsResponse>>
 
     @POST(EndpointsUrls.transactions)
-    fun transactions(@Body body: LoginRequest): Observable<Response<LoginResponse>>
+    fun transactions(@Body body: CreateTransactionRequest): Observable<Response<CreateTransactionResponse>>
 
     @GET(EndpointsUrls.userInfo)
     fun userInfo(): Observable<Response<UserInfoResponse>>

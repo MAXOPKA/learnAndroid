@@ -22,9 +22,11 @@ class HttpCodeInterceptor: Interceptor {
 
         when(response.code()) {
             401 -> {
-                preferences.setAuthToken(null)
+                if (response.body()?.string() != "No search string.") {
+                    preferences.setAuthToken(null)
 
-                throw UnauthorizedException("User is not authorized");
+                    throw UnauthorizedException("User is not authorized");
+                }
             }
             500, 502 -> throw InternalServerErrorException("An server error has occurred");
             400 -> throw BadRequestException("Invalid request");

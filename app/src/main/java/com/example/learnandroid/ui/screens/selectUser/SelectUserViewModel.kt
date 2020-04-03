@@ -7,8 +7,6 @@ import com.example.learnandroid.ui.components.usersList.UsersListViewModel
 import com.example.learnandroid.ui.screens.login.LoginDirections
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 
-class SelectUserViewModel(apiService: IAPI, preferencesService: IPreferences) : BaseViewModel(apiService,
-    preferencesService
-) {
+class SelectUserViewModel() : BaseViewModel() {
 
 }
