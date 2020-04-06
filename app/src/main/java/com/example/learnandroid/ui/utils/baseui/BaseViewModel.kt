@@ -3,6 +3,7 @@ package com.example.learnandroid.ui.utils.baseui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import com.example.learnandroid.App
 import com.example.learnandroid.services.*
 import com.example.learnandroid.services.api.utils.exceptions.UnauthorizedException
@@ -31,9 +32,21 @@ open class BaseViewModel @Inject constructor () : ViewModel() {
         navigationCommand.postValue(NavigationCommand.To(directions))
     }
 
+    fun navigateToRoot() {
+        navigationCommand.postValue(NavigationCommand.ToRoot)
+    }
+
+    fun navigateToLogin() {
+        navigationCommand.postValue(NavigationCommand.ToLogin)
+    }
+
+    fun navigateBack() {
+        navigationCommand.postValue(NavigationCommand.Back)
+    }
+
     fun errorHandler(error: Throwable) {
         if (error is UnauthorizedException) {
-            //navigate()
+            navigateToLogin()
         }
     }
 }

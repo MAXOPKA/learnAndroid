@@ -31,5 +31,7 @@
                 app:popUpTo="@+id/transactionsList"/>
         <argument android:name="userId" app:argType="integer"/>
         <argument android:name="userName" app:argType="string"/>
-    </fragment><action android:id="@+id/action_global_login" app:destination="@id/login"/>
+    </fragment>
+    <action android:id="@+id/action_global_login" app:destination="@id/login" app:popUpTo="@+id/login"
+            app:popUpToInclusive="true" app:launchSingleTop="true"/>
 </navigation>

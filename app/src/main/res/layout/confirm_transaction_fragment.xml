@@ -5,47 +5,48 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.screens.confirmTransaction.ConfirmTransaction">
-    <ScrollView
+    <RelativeLayout
+            android:id="@+id/transactionsListWrapper"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
     >
         <LinearLayout
-                android:id="@+id/transactionsListWrapper"
+                android:id="@+id/transactionsList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-        >
-            <RelativeLayout
-                    android:id="@+id/transactionsList"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:fillViewport="true"
-                    android:layout_marginHorizontal="8pt"
-            >
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Enter transfer amount"
-                />
-                <EditText
-                        android:id="@+id/amountField"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginVertical="8dp"
-                        android:inputType="numberDecimal"
-                        android:hint="Сумма"
-                />
-            </RelativeLayout>
-            <Button
-                    android:id="@+id/confirmTransactionButton"
+                android:layout_marginHorizontal="8pt"
+                android:layout_above="@+id/confirmTransactionButton"
+                android:orientation="vertical">
+            <TextView
+                    android:id="@+id/confirmTransactionTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_alignParentBottom="true"
-                    android:text="Отправить"
+                    android:text="Enter transfer amount"
+            />
+            <EditText
+                    android:id="@+id/amountField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="8dp"
+                    android:inputType="numberDecimal"
+                    android:hint="Amount"
+                    android:maxLines="1"
             />
         </LinearLayout>
-    </ScrollView>
+        <Button
+                android:id="@+id/confirmTransactionButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/bottomScreenSpacer"
+                android:layout_margin="8dp"
+                android:text="Confirm Transaction"
+        />
+        <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:id="@+id/bottomScreenSpacer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+    </RelativeLayout>
     <include layout="@layout/loader" />
 </FrameLayout>

@@ -55,7 +55,8 @@ class UserInfoViewModel() : BaseViewModel() {
 
     fun logout() {
         preferencesService.setAuthToken(null)
-        super.errorHandler(UnauthorizedException(""))
+        liveDataModel.value = liveDataModel.value?.apply { this.error = true }
+        navigateToLogin()
     }
 
     private fun getUserInfoHandler(result: UserInfoModel) {

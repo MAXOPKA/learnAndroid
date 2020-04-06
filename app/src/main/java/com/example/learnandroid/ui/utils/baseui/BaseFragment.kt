@@ -1,16 +1,22 @@
 package com.example.learnandroid.ui.utils.baseui
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.learnandroid.ui.screens.login.LoginViewModel
+import com.example.learnandroid.R
 import com.example.learnandroid.ui.utils.navigation.NavigationCommand
 import kotlinx.android.synthetic.main.loader.*
 
-open class BaseFragment : Fragment() {
+interface OnBackPressedListener {
+    fun onBackPressed()
+}
+
+open class BaseFragment : Fragment(), OnBackPressedListener {
     open lateinit var viewModel: BaseViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -26,10 +32,33 @@ open class BaseFragment : Fragment() {
                 is NavigationCommand.To -> {
                     findNavController().navigate(command.directions, command.navOptions)
                 }
+                is NavigationCommand.ToLogin -> {
+                    findNavController().navigate(R.id.action_global_login)
+                }
+                is NavigationCommand.Back -> {
+                    findNavController().navigateUp()
+                    findNavController().navigateUp()
+                }
+                is NavigationCommand.BackTo -> {
+                   // findNavController().popBackStack(command.destinationId)
+                }
             }
         }
 
+        val actionBar: ActionBar? = (activity as? AppCompatActivity)?.supportActionBar
+        actionBar?.setHomeButtonEnabled(true)
+        actionBar?.setDisplayHomeAsUpEnabled(true);
+        setHasOptionsMenu(true)
+
         viewModel?.getNavigationCommands()?.observe(viewLifecycleOwner, navigationObserver)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
     }
 
     fun setOverlayVisiblity(isLoading: Boolean) {
@@ -42,5 +71,9 @@ open class BaseFragment : Fragment() {
 
     fun checkAuthorization() {
 
+    }
+
+    override fun onBackPressed() {
+        viewModel.navigateBack()
     }
 }

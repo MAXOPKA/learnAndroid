@@ -1,6 +1,7 @@
 package com.example.learnandroid
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 
@@ -10,9 +11,5 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
-//        val actionBar: ActionBar? = supportActionBar
-//        actionBar?.setHomeButtonEnabled(true)
-//        actionBar?.setDisplayHomeAsUpEnabled(true);
-//        setContentView(R.layout.activity_main)
     }
 }
