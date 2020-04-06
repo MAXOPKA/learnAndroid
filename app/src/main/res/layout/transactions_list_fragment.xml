@@ -5,27 +5,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.screens.transactionsList.TransactionsList">
-    <LinearLayout
-            android:id="@+id/transactionsListWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+    <RelativeLayout
+        android:id="@+id/transactionsListWrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
     >
-            <androidx.recyclerview.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/transactionsList"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:fillViewport="true"
-            />
-            <include layout="@layout/loader" />
+                    android:layout_height="match_parent"
+                    android:layout_above="@id/newTransactionButton"
+        />
         <Button
                 android:id="@+id/newTransactionButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
                 android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="8pt"
+                android:layout_marginBottom="2pt"
                 android:text="New transaction"
         />
-    </LinearLayout>
+        <include layout="@layout/loader" />
+    </RelativeLayout>
 </FrameLayout>

@@ -1,5 +1,6 @@
 package com.example.learnandroid.services
 
+import com.example.learnandroid.App
 import com.example.learnandroid.models.*
 import com.example.learnandroid.services.api.requests.CreateTransactionRequest
 import com.example.learnandroid.services.api.requests.LoginRequest
@@ -10,6 +11,7 @@ import com.example.learnandroid.services.api.utils.Endpoints
 import com.example.learnandroid.services.api.utils.interceptors.AuthTokenInterceptor
 import com.example.learnandroid.services.api.utils.interceptors.HttpCodeInterceptor
 import com.example.learnandroid.utils.DaggerAppComponent
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
@@ -53,7 +55,7 @@ class API {
     val createTransactionOutput: PublishSubject<CreateTransactionModel> = PublishSubject.create()
 
     init {
-        DaggerAppComponent.create().injectAPI(this)
+        App.instance.appComponent.injectAPI(this)
     }
 
     /* Queries */
@@ -76,7 +78,7 @@ class API {
             .subscribe({
             loginHandler(it)
         }, {
-            loginOutput.onError(it)
+            loginOutput.onNext(LoginModel(true, it.message))
         })
     }
 
@@ -87,7 +89,7 @@ class API {
             .subscribe({
             transactionsHandler(it)
         }, {
-            transactionsOutput.onError(it)
+                transactionsOutput.onNext(TransactionsModel(true))
         })
     }
 
@@ -98,7 +100,7 @@ class API {
             .subscribe({
             userInfoHandler(it)
         }, {
-            userInfoOutput.onError(it)
+            userInfoOutput.onNext(UserInfoModel(true, it.message))
         })
     }
 
@@ -109,7 +111,7 @@ class API {
             .subscribe({
                 usersHandler(it)
             }, {
-                usersListOutput.onError(it)
+                usersListOutput.onNext(UsersModel(true))
             })
     }
 
@@ -157,7 +159,7 @@ class API {
             return
         }
 
-        transactionsOutput.onNext(TransactionsModel(true, null, null))
+        transactionsOutput.onNext(TransactionsModel(true))
     }
 
     private fun userInfoHandler(response: Response<UserInfoResponse>?) {
@@ -178,14 +180,13 @@ class API {
 
     private fun usersHandler(response: Response<List<User>>?) {
         response?.let { it ->
-            val users: List<UserModel> =
-                (it.body()?.map { it.toModel() }) ?: emptyList()
+            val users: List<UserModel> = (it.body()?.map { it.toModel() }) ?: emptyList()
             usersListOutput.onNext(UsersModel(!it.isSuccessful, null, users))
 
             return
         }
 
-        usersListOutput.onNext(UsersModel(true, null, null))
+        usersListOutput.onNext(UsersModel(true))
     }
 
     private fun createTransactionHandler(response: Response<CreateTransactionResponse>?) {

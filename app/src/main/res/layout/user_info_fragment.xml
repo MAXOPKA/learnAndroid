@@ -8,14 +8,18 @@
             android:id="@+id/userInfoContent"
             android:visibility="visible"
             android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="24pt">
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <LinearLayout
+                    android:layout_alignParentLeft="true"
+                    android:visibility="visible"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
         <LinearLayout
-                android:visibility="visible"
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -30,27 +34,36 @@
                     android:text=""
             />
         </LinearLayout>
-            <LinearLayout
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Баланс: "/>
-                <TextView
-                        android:id="@+id/balanceText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""/>
-            </LinearLayout>
+                    android:text="Баланс: "/>
+            <TextView
+                    android:id="@+id/balanceText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
         </LinearLayout>
-        <Button
-                android:id="@+id/logoutButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Выход"
+    </LinearLayout>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:baselineAligned="true"
+                android:layout_marginRight="0dp"
+                android:layout_alignParentRight="true"
         >
-        </Button>
+            <Button
+                    android:id="@+id/logoutButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Logout"
+            >
+            </Button>
+        </LinearLayout>
+    </RelativeLayout>
     </LinearLayout>
 </FrameLayout>

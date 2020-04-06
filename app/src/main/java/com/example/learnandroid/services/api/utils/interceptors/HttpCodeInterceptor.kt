@@ -1,5 +1,6 @@
 package com.example.learnandroid.services.api.utils.interceptors
 
+import com.example.learnandroid.App
 import com.example.learnandroid.services.IPreferences
 import com.example.learnandroid.services.Preferences
 import com.example.learnandroid.services.api.utils.exceptions.BadRequestException
@@ -14,7 +15,7 @@ class HttpCodeInterceptor: Interceptor {
     @Inject lateinit var preferences: IPreferences
 
     init {
-        DaggerAppComponent.create().injectHttpCodeInterceptor(this)
+        App.instance.appComponent.injectHttpCodeInterceptor(this)
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

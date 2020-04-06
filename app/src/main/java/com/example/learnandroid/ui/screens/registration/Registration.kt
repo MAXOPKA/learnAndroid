@@ -14,7 +14,6 @@ import com.example.learnandroid.ui.screens.login.LoginViewModel
 import com.example.learnandroid.ui.utils.MessageTypes
 import com.example.learnandroid.ui.utils.baseui.BaseFragment
 import kotlinx.android.synthetic.main.registration_fragment.messageText
-import kotlinx.android.synthetic.main.registration_fragment.progressOverlay
 
 class Registration : BaseFragment() {
 

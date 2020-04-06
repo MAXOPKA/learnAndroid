@@ -30,11 +30,11 @@ class ConfirmTransactionViewModel : BaseViewModel() {
             })
     }
 
-    fun createTransaction(amountText: String?) {
+    fun createTransaction(userName: String, amountText: String?) {
         val amount = amountText?.toDoubleOrNull()
 
         if(amount != null) {
-            apiService.createTransaction("123", amount)
+            apiService.createTransaction(userName, amount)
         } else {
             liveDataModel.value?.isLoading = false
             liveDataModel.value?.messageText = "Invalid amount"

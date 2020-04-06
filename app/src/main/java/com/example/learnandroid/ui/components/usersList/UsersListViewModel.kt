@@ -40,7 +40,7 @@ class UsersListViewModel() : BaseViewModel() {
     }
 
     fun clickOnUser(user: UserModel) {
-        navigate(SelectUserDirections.actionSelectUserToConfirmTransaction())
+        navigate(SelectUserDirections.actionSelectUserToConfirmTransaction(user.id, user.name))
     }
 
     private fun getUsers(key: String) {

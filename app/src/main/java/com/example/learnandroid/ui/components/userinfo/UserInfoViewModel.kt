@@ -6,6 +6,7 @@ import com.example.learnandroid.models.CreateTransactionModel
 import com.example.learnandroid.models.UserInfoModel
 import com.example.learnandroid.services.api.utils.exceptions.UnauthorizedException
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -74,5 +75,9 @@ class UserInfoViewModel() : BaseViewModel() {
             this.error = result.error
             balance = result.balance.toString()
         }
+    }
+
+    fun finalize() {
+        print("")
     }
 }

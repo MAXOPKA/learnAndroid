@@ -39,7 +39,10 @@ class ConfirmTransaction : BaseFragment() {
 
     private fun setRegistrationButtonAction() {
         confirmTransactionButton?.setOnClickListener {
-            confirmTransactionViewModel.createTransaction(amountField.text.toString())
+            confirmTransactionViewModel.createTransaction(
+                arguments?.getString("userName") ?: "",
+                amountField.text.toString()
+            )
         }
     }
 }

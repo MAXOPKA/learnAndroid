@@ -3,6 +3,7 @@ package com.example.learnandroid.ui.utils.baseui
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavDirections
+import com.example.learnandroid.App
 import com.example.learnandroid.services.*
 import com.example.learnandroid.services.api.utils.exceptions.UnauthorizedException
 import com.example.learnandroid.ui.screens.login.LoginDirections
@@ -17,7 +18,7 @@ open class BaseViewModel @Inject constructor () : ViewModel() {
     @Inject lateinit var preferencesService: IPreferences
 
     init {
-        DaggerAppComponent.create().injectBaseViewModel(this)
+        App.instance.appComponent.injectBaseViewModel(this)
     }
 
     private val navigationCommand = MutableLiveData<NavigationCommand>()
@@ -32,7 +33,7 @@ open class BaseViewModel @Inject constructor () : ViewModel() {
 
     fun errorHandler(error: Throwable) {
         if (error is UnauthorizedException) {
-            navigate(LoginDirections.actionLoginToLogin())
+            //navigate()
         }
     }
 }

@@ -23,8 +23,9 @@ open class BaseFragment : Fragment() {
 
         val navigationObserver = Observer<NavigationCommand?> { command ->
             when (command) {
-                is NavigationCommand.To ->
-                    findNavController().navigate(command.directions)
+                is NavigationCommand.To -> {
+                    findNavController().navigate(command.directions, command.navOptions)
+                }
             }
         }
 

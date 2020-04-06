@@ -10,7 +10,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginHorizontal="8pt"
+            android:layout_marginVertical="4pt"
     >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select user for transfer"
+        />
         <fragment
                 android:id="@+id/searchBarFragment"
                 android:name="com.example.learnandroid.ui.components.searchbar.SearchBar"
