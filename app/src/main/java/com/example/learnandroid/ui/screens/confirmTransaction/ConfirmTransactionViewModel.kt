@@ -19,7 +19,7 @@ class ConfirmTransactionViewModel : BaseViewModel() {
         false
     ))
 
-    private val createTransactionInput = apiService.createTransactionOutput
+    private val createTransactionInput = transactionsApiService.createTransactionOutput
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({ result ->
@@ -32,7 +32,7 @@ class ConfirmTransactionViewModel : BaseViewModel() {
         val amount = amountText?.toDoubleOrNull()
 
         if(amount != null) {
-            apiService.createTransaction(userName, amount)
+            transactionsApiService.createTransaction(userName, amount)
         } else {
             liveDataModel.value?.isLoading = false
             liveDataModel.value?.messageText = "Invalid amount"

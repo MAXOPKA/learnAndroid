@@ -31,7 +31,7 @@ class UsersListViewModel() : BaseViewModel() {
                 }
         }
 
-    private val transactionsInput = apiService.usersListOutput
+    private val transactionsInput = usersApiService.usersListOutput
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
         .subscribe ({ result ->
@@ -56,7 +56,7 @@ class UsersListViewModel() : BaseViewModel() {
 
         liveDataModel.value = liveDataModel.value?.apply { isLoading = true }
 
-        apiService.usersList(key)
+        usersApiService.usersList(key)
     }
 
     private fun usersErrorHandler(error: Throwable?) {

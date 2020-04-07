@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -50,6 +51,9 @@ class TransactionsList : BaseFragment() {
 
         setNewTransactionButtonAction()
         initLiveData()
+
+        val a = findNavController()
+        val b = findNavController()
 
         transactionsViewModel.getTransactions()
     }

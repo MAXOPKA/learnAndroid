@@ -20,11 +20,17 @@
                 android:id="@+id/newTransactionButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_marginHorizontal="8pt"
+                android:layout_above="@id/bottomScreenSpacer"
                 android:layout_marginBottom="2pt"
                 android:text="New transaction"
         />
+        <LinearLayout
+                android:layout_alignParentBottom="true"
+                android:id="@+id/bottomScreenSpacer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
     </RelativeLayout>
     <include layout="@layout/loader" />
 </FrameLayout>

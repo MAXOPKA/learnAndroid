@@ -19,7 +19,7 @@ class RegistrationViewModel() : BaseViewModel() {
         false
     ))
 
-    private val registrationInput = apiService.registrationOutput
+    private val registrationInput = accountsApiService.registrationOutput
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({ result ->
@@ -53,7 +53,7 @@ class RegistrationViewModel() : BaseViewModel() {
 
         val registrationData = RegistrationRequest(name, email, password)
 
-        apiService.registration(registrationData)
+        accountsApiService.registration(registrationData)
     }
 
     /* Handlers */

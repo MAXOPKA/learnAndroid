@@ -9,4 +9,5 @@ sealed class NavigationCommand {
     data class BackTo(val destinationId: Int): NavigationCommand()
     object ToRoot: NavigationCommand()
     object ToLogin: NavigationCommand()
+    object ToTransactionsList: NavigationCommand()
 }

@@ -14,7 +14,7 @@ class TransactionsListViewModel() : BaseViewModel() {
         TransactionsListLiveDataModel(emptyList())
     )
 
-    val transactionsInput = apiService.transactionsOutput
+    val transactionsInput = transactionsApiService.transactionsOutput
         .observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
         .subscribe ({ result ->
@@ -35,7 +35,7 @@ class TransactionsListViewModel() : BaseViewModel() {
             isLoading = true
         }
 
-        apiService.transactions(1)
+        transactionsApiService.transactions(1)
     }
 
     /*  Handlers */

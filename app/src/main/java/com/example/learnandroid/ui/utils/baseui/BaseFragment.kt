@@ -11,16 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.example.learnandroid.MainActivity
 import com.example.learnandroid.R
 import com.example.learnandroid.ui.utils.navigation.NavigationCommand
 import kotlinx.android.synthetic.main.loader.*
 
-
-interface OnBackPressedListener {
-    fun onBackPressed()
-}
-
-open class BaseFragment : Fragment(), OnBackPressedListener {
+open class BaseFragment : Fragment() {
     open lateinit var viewModel: BaseViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -32,21 +28,29 @@ open class BaseFragment : Fragment(), OnBackPressedListener {
         }
 
         val navigationObserver = Observer<NavigationCommand?> { command ->
+            val navController = (activity as MainActivity).navController
             when (command) {
                 is NavigationCommand.To -> {
-                    findNavController().navigate(command.directions, command.navOptions)
+                   navController?.navigate(command.directions, command.navOptions)
                 }
                 is NavigationCommand.ToLogin -> {
-                    findNavController().navigate(R.id.action_global_login)
+                    navController?.navigate(R.id.action_global_login)
+                }
+                is NavigationCommand.ToTransactionsList -> {
+                    navController?.navigate(R.id.action_global_transactionsList)
                 }
                 is NavigationCommand.Back -> {
-                    findNavController().navigateUp()
-                    findNavController().navigateUp()
+                    if (navController?.previousBackStackEntry != null) {
+                        navController?.popBackStack()
+                    }
                 }
                 is NavigationCommand.BackTo -> {
-                   // findNavController().popBackStack(command.destinationId)
+                    navController?.popBackStack(command.destinationId, true)
                 }
             }
+            //if (navController?.previousBackStackEntry == null) {
+            //}
+            val a = navController
         }
 
         val actionBar: ActionBar? = (activity as? AppCompatActivity)?.supportActionBar
@@ -59,7 +63,7 @@ open class BaseFragment : Fragment(), OnBackPressedListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            viewModel.navigateBack()
             return true;
         }
         return false;
@@ -84,9 +88,5 @@ open class BaseFragment : Fragment(), OnBackPressedListener {
 
     fun checkAuthorization() {
 
-    }
-
-    override fun onBackPressed() {
-        viewModel.navigateBack()
     }
 }

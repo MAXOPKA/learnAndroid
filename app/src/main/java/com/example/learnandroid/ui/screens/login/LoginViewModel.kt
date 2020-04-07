@@ -23,7 +23,7 @@ class LoginViewModel() : BaseViewModel() {
             navigateToTransactions()
         }
 
-        apiService.loginOutput
+        accountsApiService.loginOutput
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({ result ->
@@ -58,7 +58,7 @@ class LoginViewModel() : BaseViewModel() {
         liveDataModel.postValue(liveDataModel.value?.apply { isLoading = true })
         val loginData = LoginRequest(email, password)
 
-        apiService.login(loginData)
+        accountsApiService.login(loginData)
     }
 
     fun getLoginData(): MutableLiveData<LoginLiveDataModel>? {
@@ -79,7 +79,7 @@ class LoginViewModel() : BaseViewModel() {
                 messageType = MessageTypes.SUCCESS
                 messageText = "Success!"
             })
-            navigateToTransactions()
+            navigate(LoginDirections.actionLoginToTransactionsList())
         }
     }
 

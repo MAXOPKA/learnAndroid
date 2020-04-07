@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/navigation_graph" app:startDestination="@id/login">
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation_graph" app:startDestination="@id/login">
     <fragment android:id="@+id/login" android:name="com.example.learnandroid.ui.screens.login.Login"
-              android:label="Login">
-        <action android:id="@+id/action_login_to_login" app:destination="@id/login"/>
-        <action android:id="@+id/action_login_to_registration" app:destination="@id/registration"/>
+              android:label="Login" tools:layout="@layout/login_fragment">
         <action android:id="@+id/action_login_to_transactionsList" app:destination="@id/transactionsList"
-                app:popUpTo="@+id/transactionsList" app:popUpToInclusive="true"/>
+                app:popUpToInclusive="true" app:launchSingleTop="true" app:popUpTo="@+id/login"/>
+        <action android:id="@+id/action_login_to_registration" app:destination="@id/registration"
+                app:launchSingleTop="true" app:popUpToInclusive="false"/>
     </fragment>
     <fragment android:id="@+id/registration"
               android:name="com.example.learnandroid.ui.screens.registration.Registration"
               android:label="Registration">
         <action android:id="@+id/action_registration_to_transactionsList" app:destination="@id/transactionsList"
-                app:popUpTo="@+id/transactionsList" app:popUpToInclusive="true"/>
-        <action android:id="@+id/action_registration_to_login" app:destination="@id/login" app:popUpTo="@+id/login"
-                app:popUpToInclusive="true"/>
+                app:launchSingleTop="true" app:popUpTo="@+id/login" app:popUpToInclusive="true"/>
     </fragment>
     <fragment android:id="@+id/transactionsList"
               android:name="com.example.learnandroid.ui.screens.transactionsList.TransactionsList"
               android:label="TransactionsList">
-        <action android:id="@+id/action_transactionsList_to_selectUser" app:destination="@id/selectUser"/>
+        <action android:id="@+id/action_transactionsList_to_selectUser" app:destination="@id/selectUser"
+                app:launchSingleTop="true" app:popUpTo="@+id/transactionsList" app:popUpToInclusive="false"/>
     </fragment>
     <fragment android:id="@+id/selectUser" android:name="com.example.learnandroid.ui.screens.selectUser.SelectUser"
               android:label="SelectUser">
-        <action android:id="@+id/action_selectUser_to_confirmTransaction" app:destination="@id/confirmTransaction"/>
+        <action android:id="@+id/action_selectUser_to_confirmTransaction" app:destination="@id/confirmTransaction"
+                app:launchSingleTop="true"/>
     </fragment>
     <fragment android:id="@+id/confirmTransaction"
               android:name="com.example.learnandroid.ui.screens.confirmTransaction.ConfirmTransaction"
               android:label="ConfirmTransaction">
         <action android:id="@+id/action_confirmTransaction_to_transactionsList" app:destination="@id/transactionsList"
-                app:popUpTo="@+id/transactionsList" app:popUpToInclusive="true"/>
+                app:popUpTo="@+id/navigation_graph" app:popUpToInclusive="false" app:launchSingleTop="true"/>
         <argument android:name="userId" app:argType="integer"/>
         <argument android:name="userName" app:argType="string"/>
     </fragment>
-    <action android:id="@+id/action_global_login" app:destination="@id/login" app:popUpTo="@+id/login"
-            app:popUpToInclusive="true" app:launchSingleTop="true"/>
+    <action android:id="@+id/action_global_login" app:destination="@id/login" app:popUpTo="@+id/navigation_graph"
+            app:launchSingleTop="true" app:popUpToInclusive="false"/>
+    <action android:id="@+id/action_global_transactionsList" app:destination="@id/transactionsList"
+            app:launchSingleTop="true" app:popUpToInclusive="true"/>
 </navigation>

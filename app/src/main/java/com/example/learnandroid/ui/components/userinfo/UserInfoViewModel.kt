@@ -16,7 +16,7 @@ class UserInfoViewModel() : BaseViewModel() {
         UserInfoLiveDataModel(false, null, null)
     )
 
-    private val userInfoInput = apiService.userInfoOutput
+    private val userInfoInput = usersApiService.userInfoOutput
     .observeOn(AndroidSchedulers.mainThread())
     .subscribeOn(Schedulers.io())
     .subscribe ({ result ->
@@ -26,7 +26,7 @@ class UserInfoViewModel() : BaseViewModel() {
         getUserInfoErrorHandler(error)
     })
 
-    private val loginInput = apiService.loginOutput
+    private val loginInput = accountsApiService.loginOutput
     .observeOn(AndroidSchedulers.mainThread())
     .subscribeOn(Schedulers.io())
     .subscribe ({ result ->
@@ -35,7 +35,7 @@ class UserInfoViewModel() : BaseViewModel() {
         getUserInfoErrorHandler(error)
     })
 
-    private val registrationInput = apiService.registrationOutput
+    private val registrationInput = accountsApiService.registrationOutput
     .observeOn(AndroidSchedulers.mainThread())
     .subscribeOn(Schedulers.io())
     .subscribe ({ result ->
@@ -44,7 +44,7 @@ class UserInfoViewModel() : BaseViewModel() {
         getUserInfoErrorHandler(error)
     })
 
-    private val createTransactionInput = apiService.createTransactionOutput
+    private val createTransactionInput = transactionsApiService.createTransactionOutput
     .observeOn(AndroidSchedulers.mainThread())
     .subscribeOn(Schedulers.io())
     .subscribe ({ result ->
@@ -58,7 +58,7 @@ class UserInfoViewModel() : BaseViewModel() {
     }
 
     fun getUserInfo() {
-        apiService.userInfo()
+        usersApiService.userInfo()
     }
 
     fun logout() {

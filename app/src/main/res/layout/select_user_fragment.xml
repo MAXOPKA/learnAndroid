@@ -8,7 +8,7 @@
         tools:context=".ui.screens.selectUser.SelectUser">
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_marginHorizontal="8pt"
             android:layout_marginVertical="4pt"
@@ -37,7 +37,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/searchBarFragment"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/bottomScreenSpacer"
                 android:fillViewport="true"
         />
     </LinearLayout>
