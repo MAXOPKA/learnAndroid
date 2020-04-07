@@ -67,7 +67,7 @@ class API {
             .subscribe({
             registrationHandler(it)
         }, {
-            registrationOutput.onError(it)
+                registrationOutput.onNext(RegistrationModel(true, it.message))
         })
     }
 
@@ -78,7 +78,7 @@ class API {
             .subscribe({
             loginHandler(it)
         }, {
-            loginOutput.onNext(LoginModel(true, it.message))
+            loginOutput.onNext(LoginModel(true, it.localizedMessage))
         })
     }
 

@@ -1,5 +1,6 @@
 package com.example.learnandroid.ui.screens.registration
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -82,6 +83,6 @@ class Registration : BaseFragment() {
     }
 
     private fun setMessageColor(messageType: MessageTypes) {
-        messageText.setTextColor(messageType.rgb)
+        messageText.setTextColor(Color.parseColor(messageType.hex))
     }
 }

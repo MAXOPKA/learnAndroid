@@ -14,17 +14,15 @@ class TransactionsListViewModel() : BaseViewModel() {
         TransactionsListLiveDataModel(emptyList())
     )
 
-    init {
-        apiService.transactionsOutput
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ result ->
-                getTransactionsHandler(result)
-            }, { error ->
-                super.errorHandler(error)
-                getTransactionsErrorHandler()
-            })
-    }
+    val transactionsInput = apiService.transactionsOutput
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe ({ result ->
+            getTransactionsHandler(result)
+        }, { error ->
+            super.errorHandler(error)
+            getTransactionsErrorHandler()
+        })
 
     /* Navigation */
     fun navigateToSelectUser() {
@@ -52,5 +50,11 @@ class TransactionsListViewModel() : BaseViewModel() {
         liveDataModel.value = liveDataModel.value?.apply {
             isLoading = false
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        transactionsInput.dispose()
     }
 }

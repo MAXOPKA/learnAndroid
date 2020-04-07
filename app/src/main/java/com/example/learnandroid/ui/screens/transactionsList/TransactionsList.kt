@@ -45,6 +45,7 @@ class TransactionsList : BaseFragment() {
 
         super.onActivityCreated(savedInstanceState)
 
+        hideKeyboard(this.activity)
         viewManager = LinearLayoutManager(this.activity)
 
         setNewTransactionButtonAction()

@@ -19,8 +19,7 @@ class RegistrationViewModel() : BaseViewModel() {
         false
     ))
 
-    init {
-        apiService.registrationOutput
+    private val registrationInput = apiService.registrationOutput
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({ result ->
@@ -28,7 +27,6 @@ class RegistrationViewModel() : BaseViewModel() {
             }, { error ->
                 registrationErrorHandler(error)
             })
-    }
 
     /* Navigation */
 
@@ -38,16 +36,21 @@ class RegistrationViewModel() : BaseViewModel() {
 
     /* Actions */
     fun registration(name: String, email: String, password: String, passwordConfirmation: String) {
-        liveDataModel.value?.messageText = null
+        val validateError = validateRegistration(name, email, password, passwordConfirmation)
 
-        if (!validateRegistration(name, email, password, passwordConfirmation)) {
-            liveDataModel.value?.messageText = "Error field values!"
-            liveDataModel.value?.messageType = MessageTypes.ERROR
+        if (!validateError.isNullOrBlank()) {
+            liveDataModel.postValue(liveDataModel.value?.apply {
+                messageText = validateError
+                messageType = MessageTypes.ERROR
+            })
 
             return
         }
 
-        liveDataModel.value?.isLoading = true
+        liveDataModel.postValue(liveDataModel.value?.apply {
+            isLoading = true
+        })
+
         val registrationData = RegistrationRequest(name, email, password)
 
         apiService.registration(registrationData)
@@ -55,29 +58,46 @@ class RegistrationViewModel() : BaseViewModel() {
 
     /* Handlers */
     private fun registrationHandler(result: RegistrationModel) {
-        liveDataModel.value?.isLoading = false
         if (result.error) {
-            liveDataModel.value?.messageText = "Error"
-            liveDataModel.value?.messageType = MessageTypes.ERROR
+            liveDataModel.postValue(liveDataModel.value?.apply {
+                isLoading = false
+                messageText = result.errorMessage
+                messageType = MessageTypes.ERROR
+            })
         } else {
-            liveDataModel.value?.messageText = "Success!"
-            liveDataModel.value?.messageType = MessageTypes.SUCCESS
+            liveDataModel.postValue(liveDataModel.value?.apply {
+                isLoading = false
+                messageText = "Success!"
+                messageType = MessageTypes.SUCCESS
+            })
+
+            navigateToTransactions()
         }
+
+
     }
 
     fun registrationErrorHandler(error: Throwable) {
-        liveDataModel.value?.isLoading = false
-        liveDataModel.value?.messageText = "Error"
-        liveDataModel.value?.messageType = MessageTypes.ERROR
+        liveDataModel.postValue(liveDataModel.value?.apply {
+            isLoading = false
+            messageText = error.message
+            messageType = MessageTypes.ERROR
+        })
     }
 
     /* Validators */
-    fun validateRegistration(name: String, email: String, password: String, passwordConfirmation: String): Boolean {
-        if (name.isEmpty()) return false
-        if (email.isEmpty()) return false
-        if (password.isEmpty()) return false
-        if (password != passwordConfirmation) return false
+    fun validateRegistration(name: String, email: String, password: String, passwordConfirmation: String): String? {
+        if (name.isEmpty()) return "Name is empty"
+        if (email.isEmpty()) return "Email is empty"
+        if (password.isEmpty()) return "Password is empty"
+        if (password != passwordConfirmation) return "The entered passwords are different"
 
-        return true
+        return null
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        registrationInput.dispose()
     }
 }

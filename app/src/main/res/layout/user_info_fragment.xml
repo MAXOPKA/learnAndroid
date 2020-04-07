@@ -6,7 +6,7 @@
              tools:context=".ui.components.userinfo.UserInfo">
     <LinearLayout
             android:id="@+id/userInfoContent"
-            android:visibility="visible"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="24pt">

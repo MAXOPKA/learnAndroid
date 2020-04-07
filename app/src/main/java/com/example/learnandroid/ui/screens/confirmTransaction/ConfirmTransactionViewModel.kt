@@ -19,8 +19,7 @@ class ConfirmTransactionViewModel : BaseViewModel() {
         false
     ))
 
-    init {
-        apiService.createTransactionOutput
+    private val createTransactionInput = apiService.createTransactionOutput
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe ({ result ->
@@ -28,7 +27,6 @@ class ConfirmTransactionViewModel : BaseViewModel() {
             }, { error ->
                 createTransactionErrorHandler(error)
             })
-    }
 
     fun createTransaction(userName: String, amountText: String?) {
         val amount = amountText?.toDoubleOrNull()
@@ -70,5 +68,11 @@ class ConfirmTransactionViewModel : BaseViewModel() {
         liveDataModel.value?.messageType = MessageTypes.ERROR
 
         liveDataModel.postValue(liveDataModel.value)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        createTransactionInput.dispose()
     }
 }

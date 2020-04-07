@@ -1,5 +1,6 @@
 package com.example.learnandroid.ui.screens.login
 
+import android.graphics.Color
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -84,6 +85,6 @@ class Login : BaseFragment() {
     }
 
     private fun setMessageColor(messageType: MessageTypes) {
-        messageText.setTextColor(messageType.rgb)
+        messageText.setTextColor(Color.parseColor(messageType.hex))
     }
 }

@@ -44,8 +44,13 @@ class LoginViewModel() : BaseViewModel() {
 
     /* Actions */
     fun login(email: String, password: String) {
-        if (!validateLogin(email, password)) {
-            liveDataModel.value = liveDataModel.value?.apply { messageText = "Error field values!" }
+        val validateError = validateLogin(email, password)
+
+        if (!validateError.isNullOrBlank()) {
+            liveDataModel.value = liveDataModel.value?.apply {
+                messageText = validateError
+                messageType = MessageTypes.ERROR
+            }
 
             return
         }
@@ -62,18 +67,20 @@ class LoginViewModel() : BaseViewModel() {
 
     /* Handlers */
     private fun loginHandler(result: LoginModel) {
-        liveDataModel.value?.isLoading = false
-
         if (result.error) {
-            liveDataModel.value?.messageText = "Error"
-            liveDataModel.value?.messageType = MessageTypes.ERROR
+            liveDataModel.postValue(liveDataModel.value?.apply {
+                isLoading = false
+                messageText = result.errorMessage
+                messageType = MessageTypes.ERROR
+            })
         } else {
-            liveDataModel.value?.messageType = MessageTypes.SUCCESS
-            liveDataModel.value?.messageText = "Success!"
+            liveDataModel.postValue(liveDataModel.value?.apply {
+                isLoading = false
+                messageType = MessageTypes.SUCCESS
+                messageText = "Success!"
+            })
+            navigateToTransactions()
         }
-
-        liveDataModel.postValue(liveDataModel.value)
-        navigateToTransactions()
     }
 
     private fun loginErrorHandler(error: Throwable) {
@@ -85,10 +92,10 @@ class LoginViewModel() : BaseViewModel() {
     }
 
     /* Validators */
-    fun validateLogin(email: String, password: String): Boolean {
-        if (email.isEmpty()) return false
-        if (password.isEmpty()) return false
+    fun validateLogin(email: String, password: String): String? {
+        if (email.isEmpty()) return "Email is empty"
+        if (password.isEmpty()) return "Password is empty"
 
-        return true
+        return null
     }
 }

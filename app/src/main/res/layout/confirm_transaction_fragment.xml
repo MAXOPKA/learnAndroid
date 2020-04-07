@@ -48,5 +48,4 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"/>
     </RelativeLayout>
-    <include layout="@layout/loader" />
 </FrameLayout>

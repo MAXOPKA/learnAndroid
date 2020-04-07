@@ -47,7 +47,7 @@ class UserInfo : BaseFragment() {
     }
 
     private fun setData(dataModel: UserInfoLiveDataModel) {
-        if(dataModel.error) {
+        if(dataModel.error || dataModel.balance == null) {
             userInfoContent.visibility = GONE
 
             return

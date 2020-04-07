@@ -8,6 +8,7 @@ import com.example.learnandroid.services.api.utils.exceptions.UnauthorizedExcept
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
 class UserInfoViewModel() : BaseViewModel() {
@@ -15,35 +16,42 @@ class UserInfoViewModel() : BaseViewModel() {
         UserInfoLiveDataModel(false, null, null)
     )
 
-    init {
-        apiService.userInfoOutput
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ result ->
-                getUserInfoHandler(result)
-            }, { error ->
-                super.errorHandler(error)
-                getUserInfoErrorHandler(error)
-            })
+    private val userInfoInput = apiService.userInfoOutput
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribeOn(Schedulers.io())
+    .subscribe ({ result ->
+        getUserInfoHandler(result)
+    }, { error ->
+        super.errorHandler(error)
+        getUserInfoErrorHandler(error)
+    })
 
-        apiService.loginOutput
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ result ->
-                getUserInfo()
-            }, { error ->
-                getUserInfoErrorHandler(error)
-            })
+    private val loginInput = apiService.loginOutput
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribeOn(Schedulers.io())
+    .subscribe ({ result ->
+        getUserInfo()
+    }, { error ->
+        getUserInfoErrorHandler(error)
+    })
 
-        apiService.createTransactionOutput
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ result ->
-                createTransactionHandler(result)
-            }, { error ->
+    private val registrationInput = apiService.registrationOutput
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribeOn(Schedulers.io())
+    .subscribe ({ result ->
+        getUserInfo()
+    }, { error ->
+        getUserInfoErrorHandler(error)
+    })
 
-            })
-    }
+    private val createTransactionInput = apiService.createTransactionOutput
+    .observeOn(AndroidSchedulers.mainThread())
+    .subscribeOn(Schedulers.io())
+    .subscribe ({ result ->
+        createTransactionHandler(result)
+    }, { error ->
+
+    })
 
     fun getUserInfoData(): MutableLiveData<UserInfoLiveDataModel>? {
         return liveDataModel
@@ -78,7 +86,12 @@ class UserInfoViewModel() : BaseViewModel() {
         }
     }
 
-    fun finalize() {
-        print("")
+    override fun onCleared() {
+        super.onCleared()
+
+        userInfoInput.dispose()
+        loginInput.dispose()
+        registrationInput.dispose()
+        createTransactionInput.dispose()
     }
 }

@@ -10,6 +10,7 @@ import com.example.learnandroid.ui.screens.selectUser.SelectUserDirections
 import com.example.learnandroid.ui.utils.baseui.BaseViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -18,9 +19,11 @@ class UsersListViewModel() : BaseViewModel() {
         UsersListLiveDataModel(emptyList(), false, false)
     )
 
+    private var inputDisposable: Disposable? = null
+
     var input: Observable<String>? = null
         set(value) {
-            value
+            inputDisposable = value
                 ?.debounce(1L, TimeUnit.SECONDS)
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe {
@@ -28,16 +31,14 @@ class UsersListViewModel() : BaseViewModel() {
                 }
         }
 
-    init {
-        apiService.usersListOutput
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe ({ result ->
-                usersHandler(result)
-            }, { error ->
-                usersErrorHandler(error)
-            })
-    }
+    private val transactionsInput = apiService.usersListOutput
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe ({ result ->
+            usersHandler(result)
+        }, { error ->
+            usersErrorHandler(error)
+        })
 
     fun clickOnUser(user: UserModel) {
         navigate(SelectUserDirections.actionSelectUserToConfirmTransaction(user.id, user.name))
@@ -70,5 +71,12 @@ class UsersListViewModel() : BaseViewModel() {
             users = result?.usersList ?: emptyList()
             isLoading = false
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+
+        inputDisposable?.dispose()
+        transactionsInput.dispose()
     }
 }
